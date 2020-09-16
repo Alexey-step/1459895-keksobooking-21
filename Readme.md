@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Stepanov Aleksey](https://up.htmlacademy.ru/javascript/21/user/1459895).
-* Наставник: [Марина Титова].(https://htmlacademy.ru/profile/id1589449).
+* Наставник: [Марина Титова](https://htmlacademy.ru/profile/id1589449).
 
 ---
 
