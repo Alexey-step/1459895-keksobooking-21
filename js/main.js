@@ -47,18 +47,33 @@ const TIME = [
 ];
 
 const PIN_SIZES = {
-  height: 65,
-  width: 65
+  height: 70,
+  width: 50
 };
 
 const COORDINATES = {
   minY: 130,
   maxY: 630,
-  minX: 65,
+  minX: 0,
   maxX: 1200
 };
 
-const getRandomNumbersArrays = (n) => {
+const DESCRIPTIONS = [
+  `Больше напоминает старую будку, но зато чисто`,
+  `Отлиное расположение для любителей искусства, рядом расположена Кексогалерея и музей восковых фигур Мисье Кекса`,
+  `Шикарные аппартаменты в самом центре кошачьего гетто`,
+  `Люкс в центре города с видом на статую Великого Кекса`,
+  `Простенькая комнатушка в кошачьей коммуналке`,
+  `Шалаш на дереве в центральном парке города, отличное место для уединения с природой в шумном мегаполисе`,
+  `Шикарный дворец для избранных котов, в котором каждый кот почувствует себя как король`,
+  `Отличное бунгало на берегу океана, к вашим услугам всегда свежая рыба (если поймаете)`
+];
+
+const map = document.querySelector(`.map`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mapPins = map.querySelector(`.map__pins`);
+
+const createRandomNumbers = (n) => {
   let arr = [];
   for (let i = 1; i < n; i++) {
     arr.push(i);
@@ -66,115 +81,85 @@ const getRandomNumbersArrays = (n) => {
   return arr;
 };
 
-let map = document.querySelector(`.map`);
-let fragment = document.createDocumentFragment();
-let pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-let mapPins = map.querySelector(`.map__pins`);
-
-map.classList.remove(`map--faded`);
-
-const getCoordinates = (min, max) => {
+const getRandomInteger = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
-const getRandoms = (arrayTime) => {
-  return arrayTime[Math.floor(Math.random() * arrayTime.length)];
+const getRandomElement = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)];
 };
 
-const getRandomElements = (arr) => {
-  let b = getRandoms(arr);
+const getUniqueItem = (arr) => {
+  let b = getRandomElement(arr);
   arr.splice(arr.indexOf(b), 1);
   return b;
 };
-
-//  const getNumbers = (numbersArr) => {
-//  let imgNumber = 0;
-//  let img = ``;
-//  imgNumber = getRandoms(numbersArr);
-//  img = `img/avatars/user0${imgNumber}.png`;
-//  imgNumber = numbersArr.indexOf(imgNumber);
-//  numbersArr.splice(imgNumber, 1);
-//  return img;
-//  };
-
-// const createRandomArray = (arr) => {
-//  let features = [];
-//  let cloneArr = [].concat(arr);
-//  let featuresRandomLength = Math.floor(Math.random() * arr.length + 1);
-//  while (features.length < featuresRandomLength) {
-//    let randomSrting = getRandoms(cloneArr);
-//    features.push(randomSrting);
-//    randomSrting = cloneArr.indexOf(randomSrting);
-//    cloneArr.splice(randomSrting, 1);
-//  }
-//  return features;
-// };
 
 const createRandomArray = (arr) => {
   let features = [];
   let cloneArr = [].concat(arr);
   let featuresRandomLength = Math.floor(Math.random() * arr.length + 1);
   while (features.length < featuresRandomLength) {
-    features.push(getRandomElements(cloneArr));
+    features.push(getUniqueItem(cloneArr));
   }
   return features;
 };
 
-const createObjects = () => {
+const createObject = () => {
+  let coordinateX = getRandomInteger(COORDINATES.minX, COORDINATES.maxX);
+  let coordinateY = getRandomInteger(COORDINATES.minY, COORDINATES.maxY);
   let oneObj = {
     "author": {
-      "avatar": `img/avatars/user0${getRandomElements(NUMBERS)}.png`
+      "avatar": `img/avatars/user0${getUniqueItem(NUMBERS)}.png`
     },
     "offer": {
-      "title": getRandomElements(TITLES),
-      "address": `600, 350`,
-      "price": getCoordinates(PRICES.min, PRICES.max),
-      "type": getRandoms(TYPE),
-      "rooms": getRandoms(getRandomNumbersArrays(4)),
-      "guests": getRandoms(getRandomNumbersArrays(6)),
-      "checkin": getRandoms(TIME),
-      "checkout": getRandoms(TIME),
+      "title": getUniqueItem(TITLES),
+      "address": `${coordinateX}, ${coordinateY}`,
+      "price": getRandomInteger(PRICES.min, PRICES.max),
+      "type": getRandomElement(TYPE),
+      "rooms": getRandomElement(createRandomNumbers(4)),
+      "guests": getRandomElement(createRandomNumbers(6)),
+      "checkin": getRandomElement(TIME),
+      "checkout": getRandomElement(TIME),
       "features": createRandomArray(FEATURES),
-      "descriptions": `asd`,
+      "descriptions": getUniqueItem(DESCRIPTIONS),
       "photos": createRandomArray(PHOTOS)
     },
     "location": {
-      "x": getCoordinates(COORDINATES.minX, COORDINATES.maxX),
-      "y": getCoordinates(COORDINATES.minY, COORDINATES.maxY)
+      "x": coordinateX,
+      "y": coordinateY
     }
   };
   return oneObj;
 };
 
-const renderArrayOfObjects = (quantity) => {
+const createArrayOfObjects = (quantity) => {
   let objArray = [];
-  let houseObj = {};
   for (let i = 0; i < quantity; i++) {
-    houseObj[i] = createObjects();
-    objArray.push(houseObj[i]);
+    objArray.push(createObject());
   }
   return objArray;
 };
-
-let objectsArray = renderArrayOfObjects(8);
 
 const renderMapPin = (object) => {
   let mapPin = pinTemplate.cloneNode(true);
 
   mapPin.querySelector(`img`).src = object.author.avatar;
   mapPin.querySelector(`img`).alt = object.offer.title;
-  mapPin.style.left = (object.location.x - PIN_SIZES.width) + `px`;
+  mapPin.style.left = (object.location.x - (PIN_SIZES.width / 2)) + `px`;
   mapPin.style.top = (object.location.y - PIN_SIZES.height) + `px`;
 
   return mapPin;
 };
 
-const filingBlock = (arr, element) => {
+const filingBlock = (arr) => {
+  let fragment = document.createDocumentFragment();
   for (let i = 0; i < arr.length; i++) {
-    element.appendChild(renderMapPin(arr[i]));
+    fragment.appendChild(renderMapPin(arr[i]));
   }
-  return element;
+  return fragment;
 };
 
-
-mapPins.appendChild(filingBlock(objectsArray, fragment));
+const objectsArray = createArrayOfObjects(8);
+mapPins.appendChild(filingBlock(objectsArray));
+map.classList.remove(`map--faded`);
