@@ -72,6 +72,8 @@ const DESCRIPTIONS = [
 const map = document.querySelector(`.map`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 const mapPins = map.querySelector(`.map__pins`);
+const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+const mapFilters = map.querySelector(`.map__filters-container`);
 
 const createRandomNumbers = (n) => {
   let arr = [];
@@ -152,6 +154,57 @@ const renderMapPin = (object) => {
   return mapPin;
 };
 
+const renderCard = (object) => {
+  let card = cardTemplate.cloneNode(true);
+
+  card.querySelector(`.popup__title`).textContent = object.offer.title;
+  card.querySelector(`.popup__text--address`).textContent = object.offer.address;
+  card.querySelector(`.popup__text--price`).textContent = object.offer.price + `₽/ночь`;
+  if (object.offer.type === `palace`) {
+    card.querySelector(`.popup__type`).textContent = `Дворец`;
+  }
+  if (object.offer.type === `flat`) {
+    card.querySelector(`.popup__type`).textContent = `квартира`;
+  }
+  if (object.offer.type === `house`) {
+    card.querySelector(`.popup__type`).textContent = `Дом`;
+  }
+  if (object.offer.type === `bungalow`) {
+    card.querySelector(`.popup__type`).textContent = `Бунгало`;
+  }
+  card.querySelector(`.popup__text--capacity`).textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
+  card.querySelector(`.popup__text--time`).textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
+  if (!object.offer.features.includes(`wifi`)) {
+    card.querySelector(`.popup__feature--wifi`).remove();
+  }
+  if (!object.offer.features.includes(`dishwasher`)) {
+    card.querySelector(`.popup__feature--dishwasher`).remove();
+  }
+  if (!object.offer.features.includes(`parking`)) {
+    card.querySelector(`.popup__feature--parking`).remove();
+  }
+  if (!object.offer.features.includes(`washer`)) {
+    card.querySelector(`.popup__feature--washer`).remove();
+  }
+  if (!object.offer.features.includes(`elevator`)) {
+    card.querySelector(`.popup__feature--elevator`).remove();
+  }
+  if (!object.offer.features.includes(`conditioner`)) {
+    card.querySelector(`.popup__feature--conditioner`).remove();
+  }
+  card.querySelector(`.popup__description`).textContent = object.offer.descriptions;
+  card.querySelector(`.popup__photo`).src = object.offer.photos;
+  for (let i = 1; i < object.offer.photos.length; i++) {
+    if (object.offer.photos.length > 1) {
+      card.querySelector(`.popup__photo`).src = object.offer.photos[0];
+      card.querySelector(`.popup__photos`).insertAdjacentHTML(`beforeend`, `<img src=${object.offer.photos[i]} class=popup__photo width=45 height=40 alt="Фотография жилья" >`);
+    }
+  }
+  card.querySelector(`.popup__avatar`).src = object.author.avatar;
+
+  return card;
+};
+
 const filingBlock = (arr) => {
   let fragment = document.createDocumentFragment();
   for (let i = 0; i < arr.length; i++) {
@@ -160,6 +213,15 @@ const filingBlock = (arr) => {
   return fragment;
 };
 
+const filingCard = (arr) => {
+  let fragment = document.createDocumentFragment();
+  for (let i = 0; i < arr.length; i++) {
+    fragment.appendChild(renderCard(arr[i]));
+  }
+  return fragment;
+};
+
 const objectsArray = createArrayOfObjects(8);
 mapPins.appendChild(filingBlock(objectsArray));
+map.insertBefore(filingCard(objectsArray), mapFilters);
 map.classList.remove(`map--faded`);
