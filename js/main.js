@@ -75,19 +75,6 @@ const DESCRIPTIONS = [
   `Отличное бунгало на берегу океана, к вашим услугам всегда свежая рыба (если поймаете)`
 ];
 
-const map = document.querySelector(`.map`);
-const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-const mapPins = map.querySelector(`.map__pins`);
-// const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
-// const mapFilters = map.querySelector(`.map__filters-container`);
-const form = document.querySelector(`.ad-form`);
-const roomNumbers = form.querySelector(`#room_number`);
-const guestsNumber = form.querySelector(`#capacity`);
-const mapPinMain = map.querySelector(`.map__pin--main`);
-const formFieldset = form.querySelectorAll(`fieldset`);
-const formMapFilters = document.querySelector(`.map__filters`);
-const addressInput = form.querySelector(`#address`);
-
 const createRandomNumbers = (n) => {
   let arr = [];
   for (let i = 1; i < n; i++) {
@@ -155,8 +142,6 @@ const createArrayOfObjects = (quantity) => {
   }
   return objArray;
 };
-
-const objectsArray = createArrayOfObjects(8);
 
 const renderMapPin = (object) => {
   let mapPin = pinTemplate.cloneNode(true);
@@ -242,19 +227,23 @@ const getMainPinCoordinates = () => {
   return coordinates;
 };
 
-for (let item of formFieldset) {
-  item.setAttribute(`disabled`, `disabled`);
-}
+const disabledForm = (element) => {
+  for (let item of element) {
+    item.setAttribute(`disabled`, `disabled`);
+  }
+};
 
-formMapFilters.setAttribute(`disabled`, `disabled`);
-addressInput.value = getMainPinCoordinates();
-
-const mapActive = () => {
-  map.classList.remove(`map--faded`);
-  for (let item of formFieldset) {
+const enableForm = (element) => {
+  for (let item of element) {
     item.removeAttribute(`disabled`);
   }
-  formMapFilters.removeAttribute(`disabled`);
+};
+
+const activateMap = () => {
+  map.classList.remove(`map--faded`);
+  form.classList.remove(`ad-form--disabled`);
+  enableForm(formFieldsets);
+  enableForm(mapFiltersSelects);
   mapPins.appendChild(filingBlock(objectsArray));
   addressInput.value = getMainPinCoordinates();
 };
@@ -277,7 +266,7 @@ const chekValidGuestsSelector = (room, guests) => {
 };
 
 const showError = () => {
-  const room = roomNumbers.value;
+  const room = roomsNumber.value;
   if (room === `1`) {
     guestsNumber.setCustomValidity(`Вместительность данного размещения не более ${room} гостя`);
   } else if (room === `100`) {
@@ -286,27 +275,20 @@ const showError = () => {
     guestsNumber.setCustomValidity(`Вместительность данного размещения не более ${room} гостей`);
   }
 
-  roomNumbers.reportValidity();
+  roomsNumber.reportValidity();
   guestsNumber.reportValidity();
-
-  roomNumbers.style.outline = `2px solid red`;
-  guestsNumber.style.outline = `2px solid red`;
-  setTimeout(() => {
-    roomNumbers.style.outline = ``;
-    guestsNumber.style.outline = ``;
-  }, 1000);
 };
 
 const clearError = () => {
-  roomNumbers.setCustomValidity(``);
+  roomsNumber.setCustomValidity(``);
   guestsNumber.setCustomValidity(``);
 };
 
 const formHandler = (evt) => {
-  if (evt.target !== roomNumbers && evt.target !== guestsNumber) {
+  if (evt.target !== roomsNumber && evt.target !== guestsNumber) {
     return;
   }
-  const roomNumberVal = roomNumbers.value;
+  const roomNumberVal = roomsNumber.value;
   const guestsNumberVal = guestsNumber.value;
   const valid = chekValidGuestsSelector(roomNumberVal, guestsNumberVal);
   if (!valid) {
@@ -316,18 +298,39 @@ const formHandler = (evt) => {
   }
 };
 
+const map = document.querySelector(`.map`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mapPins = map.querySelector(`.map__pins`);
+// const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+const mapFiltersContainer = map.querySelector(`.map__filters-container`);
+const form = document.querySelector(`.ad-form`);
+const roomsNumber = form.querySelector(`#room_number`);
+const guestsNumber = form.querySelector(`#capacity`);
+const mapPinMain = map.querySelector(`.map__pin--main`);
+const formFieldsets = form.querySelectorAll(`fieldset`);
+const mapFilters = mapFiltersContainer.querySelector(`.map__filters`);
+const addressInput = form.querySelector(`#address`);
+const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
+
+addressInput.value = getMainPinCoordinates();
+addressInput.setAttribute(`disabled`, `disabled`);
+const objectsArray = createArrayOfObjects(8);
+
+disabledForm(formFieldsets);
+disabledForm(mapFiltersSelects);
+
+form.addEventListener(`change`, formHandler);
+
 mapPinMain.addEventListener(`mousedown`, (evt) => {
-  if (evt.key === 0) {
-    mapActive();
+  if (evt.which === 1) {
+    activateMap();
   }
 });
 
 mapPinMain.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
-    mapActive();
+    activateMap();
   }
 });
 
-form.addEventListener(`change`, formHandler);
-
-// map.insertBefore(filingCards(objectsArray), mapFilters);
+// map.insertBefore(filingCards(objectsArray), mapFiltersContainer);
