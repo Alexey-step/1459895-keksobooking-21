@@ -22,9 +22,9 @@ const TITLES = [
   `И снова Мадрид`
 ];
 
-const PRICES = {
-  min: 1000,
-  max: 5000
+const Prices = {
+  MIN: 1000,
+  MAX: 5000
 };
 
 const PHOTOS = [
@@ -46,16 +46,22 @@ const TIME = [
   `14:00`
 ];
 
-const PIN_SIZES = {
-  height: 70,
-  width: 50
+const PinSizes = {
+  HEIGHT: 70,
+  WIDTH: 50
 };
 
-const COORDINATES = {
-  minY: 130,
-  maxY: 630,
-  minX: 0,
-  maxX: 1200
+const Coordinates = {
+  MIN_Y: 130,
+  MAX_Y: 630,
+  MIN_X: 0,
+  MAX_X: 1200
+};
+
+const MapMainPinSize = {
+  HEIGHT: 65,
+  WIDTH: 65,
+  MAX_HEIGHT: 87
 };
 
 const DESCRIPTIONS = [
@@ -68,12 +74,6 @@ const DESCRIPTIONS = [
   `Шикарный дворец для избранных котов, в котором каждый кот почувствует себя как король`,
   `Отличное бунгало на берегу океана, к вашим услугам всегда свежая рыба (если поймаете)`
 ];
-
-const map = document.querySelector(`.map`);
-const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-const mapPins = map.querySelector(`.map__pins`);
-const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
-const mapFilters = map.querySelector(`.map__filters-container`);
 
 const createRandomNumbers = (n) => {
   let arr = [];
@@ -108,8 +108,8 @@ const createRandomArray = (arr) => {
 };
 
 const createObject = () => {
-  let coordinateX = getRandomInteger(COORDINATES.minX, COORDINATES.maxX);
-  let coordinateY = getRandomInteger(COORDINATES.minY, COORDINATES.maxY);
+  let coordinateX = getRandomInteger(Coordinates.MIN_X, Coordinates.MAX_X);
+  let coordinateY = getRandomInteger(Coordinates.MIN_Y, Coordinates.MAX_Y);
   let oneObj = {
     "author": {
       "avatar": `img/avatars/user0${getUniqueItem(NUMBERS)}.png`
@@ -117,7 +117,7 @@ const createObject = () => {
     "offer": {
       "title": getUniqueItem(TITLES),
       "address": `${coordinateX}, ${coordinateY}`,
-      "price": getRandomInteger(PRICES.min, PRICES.max),
+      "price": getRandomInteger(Prices.MIN, Prices.MAX),
       "type": getRandomElement(TYPE),
       "rooms": getRandomElement(createRandomNumbers(4)),
       "guests": getRandomElement(createRandomNumbers(6)),
@@ -148,12 +148,12 @@ const renderMapPin = (object) => {
 
   mapPin.querySelector(`img`).src = object.author.avatar;
   mapPin.querySelector(`img`).alt = object.offer.title;
-  mapPin.style.left = (object.location.x - (PIN_SIZES.width / 2)) + `px`;
-  mapPin.style.top = (object.location.y - PIN_SIZES.height) + `px`;
+  mapPin.style.left = (object.location.x - (PinSizes.WIDTH / 2)) + `px`;
+  mapPin.style.top = (object.location.y - PinSizes.HEIGHT) + `px`;
 
   return mapPin;
 };
-
+/*
 const renderCard = (object) => {
   let card = cardTemplate.cloneNode(true);
   const OfferType = {
@@ -197,7 +197,7 @@ const renderCard = (object) => {
   }
   return card;
 };
-
+*/
 
 const filingBlock = (arr) => {
   let fragment = document.createDocumentFragment();
@@ -206,7 +206,7 @@ const filingBlock = (arr) => {
   }
   return fragment;
 };
-
+/*
 const filingCards = (arr) => {
   let fragment = document.createDocumentFragment();
   for (let i = 0; i < arr.length; i++) {
@@ -214,8 +214,123 @@ const filingCards = (arr) => {
   }
   return fragment.appendChild(renderCard(arr[0]));
 };
+*/
+const getMainPinCoordinates = () => {
+  let mapPinMainX = mapPinMain.style.left.replace(/[^\d.-]/g, ``);
+  let mapPinMainY = mapPinMain.style.top.replace(/[^\d.-]/g, ``);
+  let coordinates;
+  if (map.classList.contains(`map--faded`)) {
+    coordinates = `${Math.floor(+mapPinMainX + MapMainPinSize.WIDTH / 2)}, ${Math.floor(+mapPinMainY + MapMainPinSize.HEIGHT / 2)}`;
+  } else {
+    coordinates = `${Math.floor(+mapPinMainX + MapMainPinSize.WIDTH / 2)}, ${Math.floor(+mapPinMainY + MapMainPinSize.MAX_HEIGHT)}`;
+  }
+  return coordinates;
+};
 
+const disabledForm = (element) => {
+  for (let item of element) {
+    item.setAttribute(`disabled`, `disabled`);
+  }
+};
+
+const enableForm = (element) => {
+  for (let item of element) {
+    item.removeAttribute(`disabled`);
+  }
+};
+
+const activateMap = () => {
+  map.classList.remove(`map--faded`);
+  form.classList.remove(`ad-form--disabled`);
+  enableForm(formFieldsets);
+  enableForm(mapFiltersSelects);
+  mapPins.appendChild(filingBlock(objectsArray));
+  addressInput.value = getMainPinCoordinates();
+};
+
+const chekValidGuestsSelector = (room, guests) => {
+  room = +room;
+  guests = +guests;
+  const MAX_ROOM = 100;
+  const MIN_GUESTS = 0;
+  if (room === MAX_ROOM && guests !== MIN_GUESTS) {
+    return false;
+  }
+  if (guests > room) {
+    return false;
+  }
+  if (room < MAX_ROOM && guests === MIN_GUESTS) {
+    return false;
+  }
+  return true;
+};
+
+const showError = () => {
+  const room = roomsNumber.value;
+  if (room === `1`) {
+    guestsNumber.setCustomValidity(`Вместительность данного размещения не более ${room} гостя`);
+  } else if (room === `100`) {
+    guestsNumber.setCustomValidity(`Это размещение не для гостей`);
+  } else {
+    guestsNumber.setCustomValidity(`Вместительность данного размещения не более ${room} гостей`);
+  }
+
+  roomsNumber.reportValidity();
+  guestsNumber.reportValidity();
+};
+
+const clearError = () => {
+  roomsNumber.setCustomValidity(``);
+  guestsNumber.setCustomValidity(``);
+};
+
+const formHandler = (evt) => {
+  if (evt.target !== roomsNumber && evt.target !== guestsNumber) {
+    return;
+  }
+  const roomNumberVal = roomsNumber.value;
+  const guestsNumberVal = guestsNumber.value;
+  const valid = chekValidGuestsSelector(roomNumberVal, guestsNumberVal);
+  if (!valid) {
+    showError();
+  } else {
+    clearError();
+  }
+};
+
+const map = document.querySelector(`.map`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mapPins = map.querySelector(`.map__pins`);
+// const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+const mapFiltersContainer = map.querySelector(`.map__filters-container`);
+const form = document.querySelector(`.ad-form`);
+const roomsNumber = form.querySelector(`#room_number`);
+const guestsNumber = form.querySelector(`#capacity`);
+const mapPinMain = map.querySelector(`.map__pin--main`);
+const formFieldsets = form.querySelectorAll(`fieldset`);
+const mapFilters = mapFiltersContainer.querySelector(`.map__filters`);
+const addressInput = form.querySelector(`#address`);
+const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
+
+addressInput.value = getMainPinCoordinates();
+addressInput.setAttribute(`readonly`, ``);
 const objectsArray = createArrayOfObjects(8);
-mapPins.appendChild(filingBlock(objectsArray));
-map.insertBefore(filingCards(objectsArray), mapFilters);
-map.classList.remove(`map--faded`);
+
+disabledForm(formFieldsets);
+disabledForm(mapFiltersSelects);
+
+form.addEventListener(`change`, formHandler);
+
+mapPinMain.addEventListener(`mousedown`, (evt) => {
+  if (evt.button === 0) {
+    activateMap();
+  }
+});
+
+mapPinMain.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    activateMap();
+  }
+});
+
+// map.insertBefore(filingCards(objectsArray), mapFiltersContainer);
