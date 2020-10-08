@@ -290,6 +290,9 @@ const openPopup = (pin, card) => {
     });
     pin[i].addEventListener(`keydown`, (evt) => {
       if (evt.key === `Enter`) {
+        if (currentCard) {
+          hideElement(currentCard);
+        }
         showElement(card[i]);
       }
     });
@@ -300,10 +303,10 @@ const showObjectCard = () => {
   const popupsClose = document.querySelectorAll(`.popup__close`);
   const pins = map.querySelectorAll(`.map__pin`);
   const pinsArray = createArrayOfPins(pins);
-  const mapCard = document.querySelectorAll(`.map__card`);
-  hideElements(mapCard);
-  openPopup(pinsArray, mapCard);
-  closePopup(popupsClose, mapCard);
+  const mapCards = document.querySelectorAll(`.map__card`);
+  hideElements(mapCards);
+  openPopup(pinsArray, mapCards);
+  closePopup(popupsClose, mapCards);
 };
 
 const closePopup = (closeButtons, cards) => {
