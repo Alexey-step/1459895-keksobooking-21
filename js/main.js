@@ -1,5 +1,15 @@
 "use strict";
 
+const MAX_PRICE = 1000000;
+
+const MAX_ROOM = 100;
+const MIN_GUESTS = 0;
+
+const MAX_LENGTH_VALUE = 100;
+const MIN_LENGTH_VALUE = 30;
+
+const MIN_PRICES = [0, 1000, 5000, 10000];
+
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const FEATURES = [
@@ -239,20 +249,22 @@ const enableForm = (element) => {
   }
 };
 
-const hidePins = (element) => {
-  for (let item of element) {
-    if (!item.classList.contains(`map__pin--main`)) {
-      item.style.display = `none`;
-    }
+const hideElements = (items) => {
+  for (let item of items) {
+    item.style.display = `none`;
   }
 };
 
-const showPins = (element) => {
-  for (let item of element) {
-    if (!item.classList.contains(`map__pin--main`)) {
-      item.style.display = `block`;
-    }
-  }
+const showElement = (item) => {
+  item.style.display = `block`;
+  currentCard = item;
+  document.addEventListener(`keydown`, onEscPress);
+};
+
+const hideElement = (item) => {
+  item.style.display = `none`;
+  currentCard = null;
+  document.removeEventListener(`keydown`, onEscPress);
 };
 
 const activateMap = () => {
@@ -260,50 +272,44 @@ const activateMap = () => {
   form.classList.remove(`ad-form--disabled`);
   enableForm(formFieldsets);
   enableForm(mapFiltersSelects);
-  showPins(pins);
+  mapPins.appendChild(filingBlock(objectsArray));
+  map.insertBefore(filingCards(objectsArray), mapFiltersContainer);
   addressInput.value = getMainPinCoordinates();
   showObjectCard();
-};
-
-const hideCards = (items) => {
-  for (let item of items) {
-    item.style.display = `none`;
-  }
+  mapPinMain.removeEventListener(`mousedown`, onMouseDownPress);
+  mapPinMain.removeEventListener(`keydown`, onEnterPress);
 };
 
 const openPopup = (pin, card) => {
   for (let i = 0; i < pin.length; i++) {
-    if (!pin[i].classList.contains(`map__pin--main`)) {
-      pin[i].addEventListener(`click`, () => {
-        hideCards(card);
-        card[i - 1].style.display = `block`;
-      });
-      pin[i].addEventListener(`keydown`, (evt) => {
-        if (evt.key === `Enter`) {
-          hideCards(card);
-          card[i - 1].style.display = `block`;
-        }
-      });
-    }
+    pin[i].addEventListener(`click`, () => {
+      if (currentCard) {
+        hideElement(currentCard);
+      }
+      showElement(card[i]);
+    });
+    pin[i].addEventListener(`keydown`, (evt) => {
+      if (evt.key === `Enter`) {
+        showElement(card[i]);
+      }
+    });
   }
 };
 
 const showObjectCard = () => {
   const popupsClose = document.querySelectorAll(`.popup__close`);
-  openPopup(pins, mapCard);
+  const pins = map.querySelectorAll(`.map__pin`);
+  const pinsArray = createArrayOfPins(pins);
+  const mapCard = document.querySelectorAll(`.map__card`);
+  hideElements(mapCard);
+  openPopup(pinsArray, mapCard);
   closePopup(popupsClose, mapCard);
 };
 
-const closePopup = (closeButton, card) => {
-  for (let i = 0; i < closeButton.length; i++) {
-    closeButton[i].addEventListener(`click`, () => {
-      card[i].style.display = `none`;
-    });
-    document.addEventListener(`keydown`, (evt) => {
-      if (evt.key === `Escape`) {
-        evt.preventDefault();
-        card[i].style.display = `none`;
-      }
+const closePopup = (closeButtons, cards) => {
+  for (let i = 0; i < closeButtons.length; i++) {
+    closeButtons[i].addEventListener(`click`, () => {
+      hideElement(cards[i]);
     });
   }
 };
@@ -311,8 +317,6 @@ const closePopup = (closeButton, card) => {
 const chekValidGuestsSelector = (room, guests) => {
   room = +room;
   guests = +guests;
-  const MAX_ROOM = 100;
-  const MIN_GUESTS = 0;
   if (room === MAX_ROOM && guests !== MIN_GUESTS) {
     return false;
   }
@@ -349,26 +353,21 @@ const formHandler = (evt) => {
     const roomNumberVal = roomsNumber.value;
     const guestsNumberVal = guestsNumber.value;
     const valid = chekValidGuestsSelector(roomNumberVal, guestsNumberVal);
-    if (!valid) {
-      showError();
-    } else {
-      clearError();
-    }
-    return;
+    return !valid ? showError() : clearError();
   }
   if (evt.target === formTitleInput) {
-    chekValidTitle();
+    return chekValidTitle();
   }
   if (evt.target === formPrice || evt.target === formType) {
-    const MIN_PRICES = [0, 1000, 5000, 10000];
-    checkValidPrice(MIN_PRICES, formType);
+    return checkValidPrice(MIN_PRICES, formType);
   }
   if (evt.target === formTimeIn) {
-    syncTime(formTimeIn, formTimeOut);
+    return syncTime(formTimeIn, formTimeOut);
   }
   if (evt.target === formTimeOut) {
-    syncTime(formTimeOut, formTimeIn);
+    return syncTime(formTimeOut, formTimeIn);
   }
+  return true;
 };
 
 const syncTime = (time1, time2) => {
@@ -377,25 +376,17 @@ const syncTime = (time1, time2) => {
 
 const checkValidPrice = (price, type) => {
   let inputPrice = parseInt(formPrice.value, 10);
-  const MAX_PRICE = 1000000;
-  for (let i = 0; i < type.length; i++) {
-    if (type[i].selected) {
-      formPrice.placeholder = price[i];
-      if (inputPrice < price[i]) {
-        formPrice.setCustomValidity(`Минимальная цена для данного размещения ${price[i]}`);
-      } else if (inputPrice > MAX_PRICE) {
-        formPrice.setCustomValidity(`Максимально возможное значение ${MAX_PRICE}`);
-      } else {
-        formPrice.setCustomValidity(``);
-      }
-      formPrice.reportValidity();
-    }
+  formPrice.placeholder = price[type.selectedIndex];
+  if (inputPrice < price[type.selectedIndex]) {
+    formPrice.setCustomValidity(`Минимальная цена для данного размещения ${price[type.selectedIndex]}`);
+  } else if (inputPrice > MAX_PRICE) {
+    formPrice.setCustomValidity(`Максимально возможное значение ${MAX_PRICE}`);
+  } else {
+    formPrice.setCustomValidity(``);
   }
 };
 
 const chekValidTitle = () => {
-  const MAX_LENGTH_VALUE = 100;
-  const MIN_LENGTH_VALUE = 30;
   let inputValueLength = formTitleInput.value.length;
   if (inputValueLength < MIN_LENGTH_VALUE) {
     formTitleInput.setCustomValidity(`Слишком коротко, минимальная длинна заголовка ${MIN_LENGTH_VALUE} симв, допишите еще ${MIN_LENGTH_VALUE - inputValueLength} симв.`);
@@ -406,6 +397,35 @@ const chekValidTitle = () => {
   }
 
   formTitleInput.reportValidity();
+};
+
+const createArrayOfPins = (items) => {
+  let arrayOfPins = [];
+  for (let i = 0; i < items.length; i++) {
+    if (!items[i].classList.contains(`map__pin--main`)) {
+      arrayOfPins.push(items[i]);
+    }
+  }
+  return arrayOfPins;
+};
+
+const onMouseDownPress = (evt) => {
+  if (evt.button === 0) {
+    activateMap();
+  }
+};
+
+const onEnterPress = (evt) => {
+  if (evt.key === `Enter`) {
+    activateMap();
+  }
+};
+
+const onEscPress = (evt) => {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    hideElement(currentCard);
+  }
 };
 
 const map = document.querySelector(`.map`);
@@ -426,30 +446,17 @@ const formPrice = form.querySelector(`#price`);
 const formType = form.querySelector(`#type`);
 const formTimeIn = form.querySelector(`#timein`);
 const formTimeOut = form.querySelector(`#timeout`);
+let currentCard = null;
 
 addressInput.value = getMainPinCoordinates();
 addressInput.setAttribute(`readonly`, ``);
 const objectsArray = createArrayOfObjects(8);
-mapPins.appendChild(filingBlock(objectsArray));
-const pins = map.querySelectorAll(`.map__pin`);
-hidePins(pins);
-map.insertBefore(filingCards(objectsArray), mapFiltersContainer);
-const mapCard = document.querySelectorAll(`.map__card`);
-hideCards(mapCard);
 
 disabledForm(formFieldsets);
 disabledForm(mapFiltersSelects);
 
 form.addEventListener(`change`, formHandler);
 
-mapPinMain.addEventListener(`mousedown`, (evt) => {
-  if (evt.button === 0) {
-    activateMap();
-  }
-});
+mapPinMain.addEventListener(`mousedown`, onMouseDownPress);
 
-mapPinMain.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Enter`) {
-    activateMap();
-  }
-});
+mapPinMain.addEventListener(`keydown`, onEnterPress);
