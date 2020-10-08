@@ -1,5 +1,15 @@
 "use strict";
 
+const MAX_PRICE = 1000000;
+
+const MAX_ROOM = 100;
+const MIN_GUESTS = 0;
+
+const MAX_LENGTH_VALUE = 100;
+const MIN_LENGTH_VALUE = 30;
+
+const MIN_PRICES = [0, 1000, 5000, 10000];
+
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const FEATURES = [
@@ -153,7 +163,7 @@ const renderMapPin = (object) => {
 
   return mapPin;
 };
-/*
+
 const renderCard = (object) => {
   let card = cardTemplate.cloneNode(true);
   const OfferType = {
@@ -197,7 +207,7 @@ const renderCard = (object) => {
   }
   return card;
 };
-*/
+
 
 const filingBlock = (arr) => {
   let fragment = document.createDocumentFragment();
@@ -206,15 +216,15 @@ const filingBlock = (arr) => {
   }
   return fragment;
 };
-/*
+
 const filingCards = (arr) => {
   let fragment = document.createDocumentFragment();
   for (let i = 0; i < arr.length; i++) {
     fragment.appendChild(renderCard(arr[i]));
   }
-  return fragment.appendChild(renderCard(arr[0]));
+  return fragment;
 };
-*/
+
 const getMainPinCoordinates = () => {
   let mapPinMainX = mapPinMain.style.left.replace(/[^\d.-]/g, ``);
   let mapPinMainY = mapPinMain.style.top.replace(/[^\d.-]/g, ``);
@@ -239,20 +249,77 @@ const enableForm = (element) => {
   }
 };
 
+const hideElements = (items) => {
+  for (let item of items) {
+    item.style.display = `none`;
+  }
+};
+
+const showElement = (item) => {
+  item.style.display = `block`;
+  currentCard = item;
+  document.addEventListener(`keydown`, onEscPress);
+};
+
+const hideElement = (item) => {
+  item.style.display = `none`;
+  currentCard = null;
+  document.removeEventListener(`keydown`, onEscPress);
+};
+
 const activateMap = () => {
   map.classList.remove(`map--faded`);
   form.classList.remove(`ad-form--disabled`);
   enableForm(formFieldsets);
   enableForm(mapFiltersSelects);
   mapPins.appendChild(filingBlock(objectsArray));
+  map.insertBefore(filingCards(objectsArray), mapFiltersContainer);
   addressInput.value = getMainPinCoordinates();
+  showObjectCard();
+  mapPinMain.removeEventListener(`mousedown`, onMouseDownPress);
+  mapPinMain.removeEventListener(`keydown`, onEnterPress);
+};
+
+const openPopup = (pin, card) => {
+  for (let i = 0; i < pin.length; i++) {
+    pin[i].addEventListener(`click`, () => {
+      if (currentCard) {
+        hideElement(currentCard);
+      }
+      showElement(card[i]);
+    });
+    pin[i].addEventListener(`keydown`, (evt) => {
+      if (evt.key === `Enter`) {
+        if (currentCard) {
+          hideElement(currentCard);
+        }
+        showElement(card[i]);
+      }
+    });
+  }
+};
+
+const showObjectCard = () => {
+  const popupsClose = document.querySelectorAll(`.popup__close`);
+  const pins = map.querySelectorAll(`.map__pin`);
+  const pinsArray = createArrayOfPins(pins);
+  const mapCards = document.querySelectorAll(`.map__card`);
+  hideElements(mapCards);
+  openPopup(pinsArray, mapCards);
+  closePopup(popupsClose, mapCards);
+};
+
+const closePopup = (closeButtons, cards) => {
+  for (let i = 0; i < closeButtons.length; i++) {
+    closeButtons[i].addEventListener(`click`, () => {
+      hideElement(cards[i]);
+    });
+  }
 };
 
 const chekValidGuestsSelector = (room, guests) => {
   room = +room;
   guests = +guests;
-  const MAX_ROOM = 100;
-  const MIN_GUESTS = 0;
   if (room === MAX_ROOM && guests !== MIN_GUESTS) {
     return false;
   }
@@ -285,23 +352,89 @@ const clearError = () => {
 };
 
 const formHandler = (evt) => {
-  if (evt.target !== roomsNumber && evt.target !== guestsNumber) {
-    return;
+  if (evt.target === roomsNumber || evt.target === guestsNumber) {
+    const roomNumberVal = roomsNumber.value;
+    const guestsNumberVal = guestsNumber.value;
+    const valid = chekValidGuestsSelector(roomNumberVal, guestsNumberVal);
+    return !valid ? showError() : clearError();
   }
-  const roomNumberVal = roomsNumber.value;
-  const guestsNumberVal = guestsNumber.value;
-  const valid = chekValidGuestsSelector(roomNumberVal, guestsNumberVal);
-  if (!valid) {
-    showError();
+  if (evt.target === formTitleInput) {
+    return chekValidTitle();
+  }
+  if (evt.target === formPrice || evt.target === formType) {
+    return checkValidPrice(MIN_PRICES, formType);
+  }
+  if (evt.target === formTimeIn) {
+    return syncTime(formTimeIn, formTimeOut);
+  }
+  if (evt.target === formTimeOut) {
+    return syncTime(formTimeOut, formTimeIn);
+  }
+  return true;
+};
+
+const syncTime = (time1, time2) => {
+  time2.selectedIndex = time1.selectedIndex;
+};
+
+const checkValidPrice = (price, type) => {
+  let inputPrice = parseInt(formPrice.value, 10);
+  formPrice.placeholder = price[type.selectedIndex];
+  if (inputPrice < price[type.selectedIndex]) {
+    formPrice.setCustomValidity(`Минимальная цена для данного размещения ${price[type.selectedIndex]}`);
+  } else if (inputPrice > MAX_PRICE) {
+    formPrice.setCustomValidity(`Максимально возможное значение ${MAX_PRICE}`);
   } else {
-    clearError();
+    formPrice.setCustomValidity(``);
+  }
+};
+
+const chekValidTitle = () => {
+  let inputValueLength = formTitleInput.value.length;
+  if (inputValueLength < MIN_LENGTH_VALUE) {
+    formTitleInput.setCustomValidity(`Слишком коротко, минимальная длинна заголовка ${MIN_LENGTH_VALUE} симв, допишите еще ${MIN_LENGTH_VALUE - inputValueLength} симв.`);
+  } else if (inputValueLength > MAX_LENGTH_VALUE) {
+    formTitleInput.setCustomValidity(`Слишком длинное название, максимальная длинна ${MAX_LENGTH_VALUE} симв., уберите лишние ${inputValueLength - MAX_LENGTH_VALUE} симв.`);
+  } else {
+    formTitleInput.setCustomValidity(``);
+  }
+
+  formTitleInput.reportValidity();
+};
+
+const createArrayOfPins = (items) => {
+  let arrayOfPins = [];
+  for (let i = 0; i < items.length; i++) {
+    if (!items[i].classList.contains(`map__pin--main`)) {
+      arrayOfPins.push(items[i]);
+    }
+  }
+  return arrayOfPins;
+};
+
+const onMouseDownPress = (evt) => {
+  if (evt.button === 0) {
+    activateMap();
+  }
+};
+
+const onEnterPress = (evt) => {
+  if (evt.key === `Enter`) {
+    activateMap();
+  }
+};
+
+const onEscPress = (evt) => {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    hideElement(currentCard);
   }
 };
 
 const map = document.querySelector(`.map`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 const mapPins = map.querySelector(`.map__pins`);
-// const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 const form = document.querySelector(`.ad-form`);
 const roomsNumber = form.querySelector(`#room_number`);
@@ -311,6 +444,12 @@ const formFieldsets = form.querySelectorAll(`fieldset`);
 const mapFilters = mapFiltersContainer.querySelector(`.map__filters`);
 const addressInput = form.querySelector(`#address`);
 const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
+const formTitleInput = form.querySelector(`#title`);
+const formPrice = form.querySelector(`#price`);
+const formType = form.querySelector(`#type`);
+const formTimeIn = form.querySelector(`#timein`);
+const formTimeOut = form.querySelector(`#timeout`);
+let currentCard = null;
 
 addressInput.value = getMainPinCoordinates();
 addressInput.setAttribute(`readonly`, ``);
@@ -321,16 +460,6 @@ disabledForm(mapFiltersSelects);
 
 form.addEventListener(`change`, formHandler);
 
-mapPinMain.addEventListener(`mousedown`, (evt) => {
-  if (evt.button === 0) {
-    activateMap();
-  }
-});
+mapPinMain.addEventListener(`mousedown`, onMouseDownPress);
 
-mapPinMain.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Enter`) {
-    activateMap();
-  }
-});
-
-// map.insertBefore(filingCards(objectsArray), mapFiltersContainer);
+mapPinMain.addEventListener(`keydown`, onEnterPress);
