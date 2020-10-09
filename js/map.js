@@ -2,12 +2,6 @@
 
 (function () {
 
-  const enableForm = (element) => {
-    for (let item of element) {
-      item.removeAttribute(`disabled`);
-    }
-  };
-
   const hideElements = (items) => {
     for (let item of items) {
       item.style.display = `none`;
@@ -26,26 +20,17 @@
     document.removeEventListener(`keydown`, onEscPress);
   };
 
-  const disabledForm = (element) => {
-    for (let item of element) {
-      item.setAttribute(`disabled`, `disabled`);
-    }
-  };
-
-  disabledForm(window.util.FORM_FIELDSETS);
-  disabledForm(window.util.MAP_FILTERS_SELECTS);
-
   const activateMap = () => {
-    window.util.MAP.classList.remove(`map--faded`);
-    window.util.FORM.classList.remove(`ad-form--disabled`);
-    enableForm(window.util.FORM_FIELDSETS);
-    enableForm(window.util.MAP_FILTERS_SELECTS);
-    window.util.MAP_PINS.appendChild(window.pin.filingBlock(window.data.OBJECTS_ARRAY));
-    window.util.MAP.insertBefore(window.card.filingCards(window.data.OBJECTS_ARRAY), window.util.MAP_FILTERS_CONTAINER);
-    window.util.ADDRESS_INPUT.value = window.form.getMainPinCoordinates();
+    window.elements.map.classList.remove(`map--faded`);
+    window.elements.form.classList.remove(`ad-form--disabled`);
+    window.form.enableForm(window.elements.formFieldsets);
+    window.form.enableForm(window.elements.mapFiltersSelects);
+    window.elements.mapPins.appendChild(window.pin.filingBlock(window.data.objects));
+    window.elements.map.insertBefore(window.card.filingCards(window.data.objects), window.elements.mapFiltersContainer);
+    window.elements.addressInput.value = window.form.getMainPinCoordinates();
     showObjectCard();
-    window.util.MAP_PIN_MAIN.removeEventListener(`mousedown`, onMouseDownPress);
-    window.util.MAP_PIN_MAIN.removeEventListener(`keydown`, onEnterPress);
+    window.elements.mapPinMain.removeEventListener(`mousedown`, onMouseDownPress);
+    window.elements.mapPinMain.removeEventListener(`keydown`, onEnterPress);
   };
 
   const openPopup = (pin, card) => {
@@ -69,7 +54,7 @@
 
   const showObjectCard = () => {
     const popupsClose = document.querySelectorAll(`.popup__close`);
-    const pins = window.util.MAP.querySelectorAll(`.map__pin`);
+    const pins = window.elements.map.querySelectorAll(`.map__pin`);
     const pinsArray = createArrayOfPins(pins);
     const mapCards = document.querySelectorAll(`.map__card`);
     hideElements(mapCards);
@@ -116,6 +101,9 @@
 
   let currentCard = null;
 
-  window.util.MAP_PIN_MAIN.addEventListener(`mousedown`, onMouseDownPress);
-  window.util.MAP_PIN_MAIN.addEventListener(`keydown`, onEnterPress);
+  window.map = {
+    onMouseDownPress,
+    onEnterPress
+  };
+
 })();

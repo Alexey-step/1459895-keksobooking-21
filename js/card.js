@@ -3,7 +3,7 @@
 (function () {
 
   const renderCard = (object) => {
-    let card = window.util.CARD_TEMPLATE.cloneNode(true);
+    let card = window.elements.cardTemplate.cloneNode(true);
     const OfferType = {
       palace: `дворец`,
       flat: `квартира`,

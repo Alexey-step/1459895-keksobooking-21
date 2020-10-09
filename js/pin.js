@@ -3,7 +3,7 @@
 (function () {
 
   const renderMapPin = (object) => {
-    let mapPin = window.util.PIN_TEMPLATE.cloneNode(true);
+    let mapPin = window.elements.pinTemplate.cloneNode(true);
 
     mapPin.querySelector(`img`).src = object.author.avatar;
     mapPin.querySelector(`img`).alt = object.offer.title;

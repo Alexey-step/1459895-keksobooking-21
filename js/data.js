@@ -38,6 +38,6 @@
   };
 
   window.data = {
-    OBJECTS_ARRAY: createArrayOfObjects(8)
+    objects: createArrayOfObjects(8)
   };
 })();

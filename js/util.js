@@ -84,25 +84,6 @@
     `Отличное бунгало на берегу океана, к вашим услугам всегда свежая рыба (если поймаете)`
   ];
 
-  const map = document.querySelector(`.map`);
-  const mapPins = map.querySelector(`.map__pins`);
-  const mapPinMain = map.querySelector(`.map__pin--main`);
-  const mapFiltersContainer = map.querySelector(`.map__filters-container`);
-  const mapFilters = mapFiltersContainer.querySelector(`.map__filters`);
-  const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
-  const form = document.querySelector(`.ad-form`);
-  const formFieldsets = form.querySelectorAll(`fieldset`);
-  const roomsNumber = form.querySelector(`#room_number`);
-  const guestsNumber = form.querySelector(`#capacity`);
-  const formTitleInput = form.querySelector(`#title`);
-  const formPrice = form.querySelector(`#price`);
-  const formType = form.querySelector(`#type`);
-  const formTimeIn = form.querySelector(`#timein`);
-  const formTimeOut = form.querySelector(`#timeout`);
-  const addressInput = form.querySelector(`#address`);
-  const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
-  const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-
   const createRandomNumbers = (n) => {
     let arr = [];
     for (let i = 1; i < n; i++) {
@@ -136,23 +117,6 @@
   };
 
   window.util = {
-    FORM: form,
-    ROOMS_NUMBER: roomsNumber,
-    GUESTS_NUMBER: guestsNumber,
-    FORM_TITLE_INPUT: formTitleInput,
-    FORM_PRICE: formPrice,
-    FORM_TYPE: formType,
-    FORM_TIME_IN: formTimeIn,
-    FORM_TIME_OUT: formTimeOut,
-    ADDRESS_INPUT: addressInput,
-    MAP: map,
-    MAP_PINS: mapPins,
-    MAP_PIN_MAIN: mapPinMain,
-    MAP_FILTERS_CONTAINER: mapFiltersContainer,
-    MAP_FILTERS_SELECTS: mapFiltersSelects,
-    FORM_FIELDSETS: formFieldsets,
-    CARD_TEMPLATE: cardTemplate,
-    PIN_TEMPLATE: pinTemplate,
     MAX_PRICE,
     MAX_ROOM,
     MIN_GUESTS,
