@@ -2,49 +2,20 @@
 
 (function () {
 
-  // const setNewCoordsPin = (shiftY, shiftX) => {
-  //   let newPinYCoord = window.elements.mapPinMain.offsetTop - shiftY;
-  //   let newPinXCoord = window.elements.mapPinMain.offsetLeft - shiftX;
-  //   if (newPinYCoord > window.util.PIN_COORDS.MIN_Y && newPinYCoord < window.util.PIN_COORDS.MAX_Y) {
-  //     window.elements.mapPinMain.style.top = `${newPinYCoord}px`;
-  //   }
-  //   if (newPinXCoord < window.util.PIN_COORDS.MAX_X && newPinXCoord > window.util.PIN_COORDS.MIN_X) {
-  //     window.elements.mapPinMain.style.left = `${newPinXCoord}px`;
-  //   }
-  // };
-
   const onMouseDown = (evt) => {
     evt.preventDefault();
 
-    // let startCoords = {
-    //   x: evt.clientX,
-    //   y: evt.clientY
-    // };
-
+    const {left, top} = document.querySelector(`.map`).getBoundingClientRect();
 
     const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
-
-      // let shift = {
-      //   x: startCoords.x - moveEvt.clientX,
-      //   y: startCoords.y - moveEvt.clientY
-      // };
-
-      // startCoords = {
-      //   x: moveEvt.clientX,
-      //   y: moveEvt.clientY
-      // };
-
-      // let newPinYCoord = window.elements.mapPinMain.offsetTop - shift.y;
-      // let newPinXCoord = window.elements.mapPinMain.offsetLeft - shift.x;
-      if ((moveEvt.pageY - 32) > window.util.PIN_COORDS.MIN_Y && (moveEvt.pageY - 32) < window.util.PIN_COORDS.MAX_Y) {
-        window.elements.mapPinMain.style.top = `${moveEvt.pageY - 32}px`;
+      if ((moveEvt.clientY - top - window.util.MAP_MAIN_PIN_SIZE.HEIGHT / 2) > window.util.PIN_COORDS.MIN_Y && (moveEvt.clientY - top - window.util.MAP_MAIN_PIN_SIZE.HEIGHT / 2) < window.util.PIN_COORDS.MAX_Y) {
+        window.elements.mapPinMain.style.top = `${moveEvt.clientY - top - window.util.MAP_MAIN_PIN_SIZE.HEIGHT / 2}px`;
       }
-      if ((moveEvt.pageX - 65) < window.util.PIN_COORDS.MAX_X && (moveEvt.pageX - 65) > window.util.PIN_COORDS.MIN_X) {
-        window.elements.mapPinMain.style.left = `${moveEvt.pageX - 65}px`;
+      if ((moveEvt.clientX - left - window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2) < window.util.PIN_COORDS.MAX_X && (moveEvt.clientX - left - window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2) > window.util.PIN_COORDS.MIN_X) {
+        window.elements.mapPinMain.style.left = `${moveEvt.clientX - left - window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2}px`;
       }
-      // setNewCoordsPin(shift.y, shift.x);
       window.form.updateAddressValue();
     };
 
