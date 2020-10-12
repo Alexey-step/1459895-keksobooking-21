@@ -4,7 +4,7 @@
   window.form.disabledForm(window.elements.formFieldsets);
   window.form.disabledForm(window.elements.mapFiltersSelects);
 
-  window.elements.addressInput.value = window.form.getMainPinCoordinates();
+  window.form.updateAddressValue();
   window.elements.addressInput.setAttribute(`readonly`, ``);
   window.elements.form.addEventListener(`change`, window.form.formHandler);
 
