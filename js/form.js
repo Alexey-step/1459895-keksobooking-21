@@ -99,6 +99,10 @@
     return coordinates;
   };
 
+  const updateAddressValue = () => {
+    window.elements.addressInput.value = window.form.getMainPinCoordinates();
+  };
+
   const enableForm = (element) => {
     for (let item of element) {
       item.removeAttribute(`disabled`);
@@ -115,6 +119,7 @@
     getMainPinCoordinates,
     formHandler,
     enableForm,
-    disabledForm
+    disabledForm,
+    updateAddressValue
   };
 })();

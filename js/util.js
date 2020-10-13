@@ -9,10 +9,24 @@
   const MIN_LENGTH_VALUE = 30;
   const MIN_PRICES = [0, 1000, 5000, 10000];
 
+  const MapSizes = {
+    MAP_MIN_WIDTH: 0,
+    MAP_MAX_WIDTH: 1200,
+    MAP_MIN_HEIGTH: 130,
+    MAP_MAX_HEIGHT: 630
+  };
+
   const MapMainPinSize = {
     HEIGHT: 65,
     WIDTH: 65,
     MAX_HEIGHT: 87
+  };
+
+  const PinCoords = {
+    MIN_Y: MapSizes.MAP_MIN_HEIGTH - MapMainPinSize.MAX_HEIGHT,
+    MAX_Y: MapSizes.MAP_MAX_HEIGHT - MapMainPinSize.MAX_HEIGHT,
+    MIN_X: MapSizes.MAP_MIN_WIDTH - MapMainPinSize.WIDTH / 2,
+    MAX_X: MapSizes.MAP_MAX_WIDTH - MapMainPinSize.WIDTH / 2
   };
 
   const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -118,6 +132,8 @@
 
   window.util = {
     MAX_PRICE,
+    MAP_SIZES: MapSizes,
+    PIN_COORDS: PinCoords,
     MAX_ROOM,
     MIN_GUESTS,
     MAX_LENGTH_VALUE,

@@ -103,7 +103,8 @@
 
   window.map = {
     onMouseDownPress,
-    onEnterPress
+    onEnterPress,
+    activateMap
   };
 
 })();
