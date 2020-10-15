@@ -2,22 +2,24 @@
 
 (function () {
 
+  const OfferType = {
+    palace: `дворец`,
+    flat: `квартира`,
+    house: `дом`,
+    bungalow: `бунгало`
+  };
+
+  const createCapacityString = (someObject) => {
+    let guestString = someObject.offer.guests === 1 ? `${someObject.offer.guests} гостя` : `${someObject.offer.guests} гостей`;
+    let roomsString = someObject.offer.rooms === 1 ? `${someObject.offer.rooms} комната для ` : `${someObject.offer.rooms} комнаты для `;
+    return roomsString + guestString;
+  };
+
   const renderCard = (object) => {
     let card = window.elements.cardTemplate.cloneNode(true);
-    const OfferType = {
-      palace: `дворец`,
-      flat: `квартира`,
-      house: `дом`,
-      bungalow: `бунгало`
-    };
 
     if (object.offer.rooms !== 0 && object.offer.guests !== 0) {
-      const createCapacityString = () => {
-        let guestString = object.offer.guests === 1 ? `${object.offer.guests} гостя` : `${object.offer.guests} гостей`;
-        let roomsString = object.offer.rooms === 1 ? `${object.offer.rooms} комната для ` : `${object.offer.rooms} комнаты для `;
-        return roomsString + guestString;
-      };
-      card.querySelector(`.popup__text--capacity`).textContent = createCapacityString();
+      card.querySelector(`.popup__text--capacity`).textContent = createCapacityString(object);
     } else {
       card.querySelector(`.popup__text--capacity`).remove();
     }
@@ -84,7 +86,7 @@
 
   const activateCards = (arr) => {
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < window.util.MAX_PIN_COUNT; i++) {
+    for (let i = 0; i < arr.length; i++) {
       fragment.appendChild(renderCard(arr[i]));
     }
     window.elements.map.insertBefore(fragment, window.elements.mapFiltersContainer);

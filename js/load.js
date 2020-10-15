@@ -6,6 +6,7 @@
     const xhr = new XMLHttpRequest();
 
     xhr.responseType = `json`;
+    xhr.timeout = 10000;
 
     xhr.addEventListener(`load`, () => {
       let error;
@@ -43,14 +44,10 @@
       onError(`Запрос не успел выполнится за ${xhr.timeout}мс`);
     });
 
-    xhr.timeout = 10000;
-
     xhr.open(`GET`, url);
     xhr.send();
   };
 
-  window.load = {
-    load
-  };
+  window.load = load;
 
 })();

@@ -5,23 +5,35 @@
   const renderMapPin = (object) => {
     let mapPin = window.elements.pinTemplate.cloneNode(true);
 
-    if (object.hasOwnProperty(`offer`)) {
-      mapPin.querySelector(`img`).src = object.author.avatar;
-      mapPin.querySelector(`img`).alt = object.offer.title;
-      mapPin.style.left = (object.location.x - (window.util.PIN_SIZES.WIDTH / 2)) + `px`;
-      mapPin.style.top = (object.location.y - window.util.PIN_SIZES.HEIGHT) + `px`;
-    }
+    mapPin.querySelector(`img`).src = object.author.avatar;
+    mapPin.querySelector(`img`).alt = object.offer.title;
+    mapPin.style.left = (object.location.x - (window.util.PIN_SIZES.WIDTH / 2)) + `px`;
+    mapPin.style.top = (object.location.y - window.util.PIN_SIZES.HEIGHT) + `px`;
+
 
     return mapPin;
   };
 
   const activateServerDownloads = (arr) => {
+    let newArr = filterArray(arr);
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < window.util.MAX_PIN_COUNT; i++) {
-      fragment.appendChild(renderMapPin(arr[i]));
+    for (let i = 0; i < newArr.length; i++) {
+      fragment.appendChild(renderMapPin(newArr[i]));
     }
     window.elements.mapPins.appendChild(fragment);
-    window.load.load(window.card.activateCards, window.util.errorHandler, window.util.URL);
+    window.card.activateCards(newArr);
+    window.form.enableForm(window.elements.formFieldsets);
+    window.form.enableForm(window.elements.mapFiltersSelects);
+  };
+
+  const filterArray = (arr) => {
+    let newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].hasOwnProperty(`offer`) && newArr.length < 5) {
+        newArr.push(arr[i]);
+      }
+    }
+    return newArr;
   };
 
   let currentCard = null;

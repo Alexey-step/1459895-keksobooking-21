@@ -59,7 +59,7 @@
 
   const URL = `https://21.javascript.pages.academy/keksobooking/data`;
 
-  const MAX_PIN_COUNT = 8;
+  const MAX_PIN_COUNT = 5;
 
   const errorHandler = (errorMessage) => {
     const node = document.createElement(`div`);
