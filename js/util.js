@@ -72,6 +72,65 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
+  const showSuccessMessage = () => {
+    const success = window.elements.main.querySelector(`.success`);
+    success.classList.remove(`hidden`);
+
+    document.addEventListener(`keydown`, onSuccessMessageEscPress);
+    document.addEventListener(`click`, onSuccessMessageClick);
+  };
+
+  const showErrorMessage = () => {
+    const errorButton = window.elements.main.querySelector(`.error__button`);
+    const error = window.elements.main.querySelector(`.error`);
+    error.classList.remove(`hidden`);
+
+    document.addEventListener(`keydown`, onErrorMessageEscPress);
+    document.addEventListener(`click`, onErrorMessageClick);
+    errorButton.addEventListener(`click`, onErrorButtonClick);
+  };
+
+  const onSuccessMessageEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      const success = window.elements.main.querySelector(`.success`);
+      success.classList.add(`hidden`);
+    }
+    document.removeEventListener(`keydown`, onSuccessMessageEscPress);
+  };
+
+  const onErrorMessageEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      const error = window.elements.main.querySelector(`.error`);
+      error.classList.add(`hidden`);
+    }
+    document.removeEventListener(`keydown`, onErrorMessageEscPress);
+  };
+
+  const onErrorMessageClick = (evt) => {
+    evt.preventDefault();
+    const error = window.elements.main.querySelector(`.error`);
+    error.classList.add(`hidden`);
+    document.removeEventListener(`click`, onErrorMessageClick);
+  };
+
+  const onSuccessMessageClick = (evt) => {
+    evt.preventDefault();
+    const success = window.elements.main.querySelector(`.success`);
+    success.classList.add(`hidden`);
+    document.removeEventListener(`click`, onSuccessMessageClick);
+  };
+
+  const onErrorButtonClick = (evt) => {
+    evt.preventDefault();
+    const errorButton = window.elements.main.querySelector(`.error__button`);
+    const error = window.elements.main.querySelector(`.error`);
+    error.classList.add(`hidden`);
+
+    errorButton.removeEventListener(`click`, onErrorButtonClick);
+  };
+
   window.util = {
     MAX_PRICE,
     MAP_SIZES: MapSizes,
@@ -88,6 +147,8 @@
     FEATURES,
     URL,
     MAX_PIN_COUNT,
-    errorHandler
+    errorHandler,
+    showSuccessMessage,
+    showErrorMessage
   };
 })();

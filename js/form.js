@@ -115,11 +115,40 @@
     }
   };
 
+  const onFormSubmit = (evt) => {
+    window.upload(new FormData(window.elements.form), () => {
+      window.map.deactivateMap();
+      window.elements.form.reset();
+      window.form.updateAddressValue();
+      window.util.showSuccessMessage();
+    });
+    evt.preventDefault();
+  };
+
+  const onFormResetClick = (evt) => {
+    evt.preventDefault();
+    window.elements.form.reset();
+    window.form.updateAddressValue();
+    window.elements.formReset.removeEventListener(`click`, onFormResetClick);
+  };
+
+  const onFormResetEnterPress = (evt) => {
+    if (evt.key === `Enter`) {
+      evt.preventDefault();
+      window.elements.form.reset();
+      window.form.updateAddressValue();
+    }
+    window.elements.formReset.removeEventListener(`keydown`, onFormResetEnterPress);
+  };
+
   window.form = {
     getMainPinCoordinates,
     formHandler,
     enableForm,
     disabledForm,
-    updateAddressValue
+    updateAddressValue,
+    onFormSubmit,
+    onFormResetClick,
+    onFormResetEnterPress
   };
 })();

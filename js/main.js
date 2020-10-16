@@ -12,5 +12,13 @@
   window.elements.mapPinMain.addEventListener(`keydown`, window.map.onEnterPress);
 
   window.elements.mapPinMain.addEventListener(`mousedown`, window.move.onMouseDown);
+
+  window.elements.form.addEventListener(`submit`, window.form.onFormSubmit);
+
+  window.elements.formReset.addEventListener(`keydown`, window.form.onFormResetEnterPress);
+  window.elements.formReset.addEventListener(`click`, window.form.onFormResetClick);
+
+  window.message.filingErrorBlock();
+  window.message.filingSuccessBlock();
 })();
 
