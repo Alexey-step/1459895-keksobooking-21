@@ -17,16 +17,15 @@
     window.form.disabledForm(window.elements.mapFiltersSelects);
     removePins();
     removeCards();
+    returnMainPinStartCoordinates();
     window.elements.mapPinMain.addEventListener(`mousedown`, window.map.onMouseDownPress);
     window.elements.mapPinMain.addEventListener(`keydown`, window.map.onEnterPress);
   };
 
   const removePins = () => {
-    const pins = window.elements.map.querySelectorAll(`.map__pin`);
+    const pins = window.elements.map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     for (let i = 0; i < pins.length; i++) {
-      if (!pins[i].classList.contains(`map__pin--main`)) {
-        pins[i].remove();
-      }
+      pins[i].remove();
     }
   };
 
@@ -35,6 +34,11 @@
     for (let i = 0; i < mapCard.length; i++) {
       mapCard[i].remove();
     }
+  };
+
+  const returnMainPinStartCoordinates = () => {
+    window.elements.mapPinMain.style.left = `${window.util.MAIN_PIN_START_COORDINATES.X}px`;
+    window.elements.mapPinMain.style.top = `${window.util.MAIN_PIN_START_COORDINATES.Y}px`;
   };
 
   const onMouseDownPress = (evt) => {

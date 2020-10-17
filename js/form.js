@@ -121,24 +121,25 @@
       window.elements.form.reset();
       window.form.updateAddressValue();
       window.util.showSuccessMessage();
-    });
+    }, window.util.errorHandler);
     evt.preventDefault();
   };
 
   const onFormResetClick = (evt) => {
     evt.preventDefault();
-    window.elements.form.reset();
-    window.form.updateAddressValue();
-    window.elements.formReset.removeEventListener(`click`, onFormResetClick);
+    formReset();
   };
 
   const onFormResetEnterPress = (evt) => {
     if (evt.key === `Enter`) {
       evt.preventDefault();
-      window.elements.form.reset();
-      window.form.updateAddressValue();
+      formReset();
     }
-    window.elements.formReset.removeEventListener(`keydown`, onFormResetEnterPress);
+  };
+
+  const formReset = () => {
+    window.elements.form.reset();
+    window.form.updateAddressValue();
   };
 
   window.form = {

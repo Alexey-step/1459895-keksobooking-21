@@ -57,6 +57,11 @@
     `conditioner`
   ];
 
+  const MainPinStartCoordinates = {
+    X: 570,
+    Y: 375
+  };
+
   const URL = `https://21.javascript.pages.academy/keksobooking/data`;
 
   const MAX_PIN_COUNT = 5;
@@ -93,41 +98,45 @@
   const onSuccessMessageEscPress = (evt) => {
     if (evt.key === `Escape`) {
       evt.preventDefault();
-      const success = window.elements.main.querySelector(`.success`);
-      success.classList.add(`hidden`);
+      hiddenSuccessMessage();
     }
+  };
+
+  const onSuccessMessageClick = (evt) => {
+    evt.preventDefault();
+    hiddenSuccessMessage();
+  };
+
+  const hiddenSuccessMessage = () => {
+    const success = window.elements.main.querySelector(`.success`);
+    success.classList.add(`hidden`);
+    document.removeEventListener(`click`, onSuccessMessageClick);
     document.removeEventListener(`keydown`, onSuccessMessageEscPress);
   };
 
   const onErrorMessageEscPress = (evt) => {
     if (evt.key === `Escape`) {
       evt.preventDefault();
-      const error = window.elements.main.querySelector(`.error`);
-      error.classList.add(`hidden`);
+      hiddenErrorMessage();
     }
-    document.removeEventListener(`keydown`, onErrorMessageEscPress);
   };
 
   const onErrorMessageClick = (evt) => {
     evt.preventDefault();
-    const error = window.elements.main.querySelector(`.error`);
-    error.classList.add(`hidden`);
-    document.removeEventListener(`click`, onErrorMessageClick);
-  };
-
-  const onSuccessMessageClick = (evt) => {
-    evt.preventDefault();
-    const success = window.elements.main.querySelector(`.success`);
-    success.classList.add(`hidden`);
-    document.removeEventListener(`click`, onSuccessMessageClick);
+    hiddenErrorMessage();
   };
 
   const onErrorButtonClick = (evt) => {
     evt.preventDefault();
+    hiddenErrorMessage();
+  };
+
+  const hiddenErrorMessage = () => {
     const errorButton = window.elements.main.querySelector(`.error__button`);
     const error = window.elements.main.querySelector(`.error`);
     error.classList.add(`hidden`);
-
+    document.removeEventListener(`click`, onErrorMessageClick);
+    document.removeEventListener(`keydown`, onErrorMessageEscPress);
     errorButton.removeEventListener(`click`, onErrorButtonClick);
   };
 
@@ -147,6 +156,7 @@
     FEATURES,
     URL,
     MAX_PIN_COUNT,
+    MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
     errorHandler,
     showSuccessMessage,
     showErrorMessage
