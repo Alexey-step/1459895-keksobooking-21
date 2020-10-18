@@ -115,11 +115,41 @@
     }
   };
 
+  const onFormSubmit = (evt) => {
+    window.upload(new FormData(window.elements.form), () => {
+      window.map.deactivateMap();
+      window.elements.form.reset();
+      window.form.updateAddressValue();
+      window.util.showSuccessMessage();
+    }, window.util.errorHandler);
+    evt.preventDefault();
+  };
+
+  const onFormResetClick = (evt) => {
+    evt.preventDefault();
+    formReset();
+  };
+
+  const onFormResetEnterPress = (evt) => {
+    if (evt.key === `Enter`) {
+      evt.preventDefault();
+      formReset();
+    }
+  };
+
+  const formReset = () => {
+    window.elements.form.reset();
+    window.form.updateAddressValue();
+  };
+
   window.form = {
     getMainPinCoordinates,
     formHandler,
     enableForm,
     disabledForm,
-    updateAddressValue
+    updateAddressValue,
+    onFormSubmit,
+    onFormResetClick,
+    onFormResetEnterPress
   };
 })();

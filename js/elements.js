@@ -20,6 +20,10 @@
   const addressInput = form.querySelector(`#address`);
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+  const formReset = form.querySelector(`.ad-form__reset`);
+  const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const main = document.querySelector(`main`);
 
   window.elements = {
     form,
@@ -39,6 +43,10 @@
     formFieldsets,
     cardTemplate,
     pinTemplate,
+    formReset,
+    successTemplate,
+    errorTemplate,
+    main
   };
 
 })();

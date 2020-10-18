@@ -57,6 +57,11 @@
     `conditioner`
   ];
 
+  const MainPinStartCoordinates = {
+    X: 570,
+    Y: 375
+  };
+
   const URL = `https://21.javascript.pages.academy/keksobooking/data`;
 
   const MAX_PIN_COUNT = 5;
@@ -70,6 +75,69 @@
     node.style.fontSize = `30px`;
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
+  const showSuccessMessage = () => {
+    const success = window.elements.main.querySelector(`.success`);
+    success.classList.remove(`hidden`);
+
+    document.addEventListener(`keydown`, onSuccessMessageEscPress);
+    document.addEventListener(`click`, onSuccessMessageClick);
+  };
+
+  const showErrorMessage = () => {
+    const errorButton = window.elements.main.querySelector(`.error__button`);
+    const error = window.elements.main.querySelector(`.error`);
+    error.classList.remove(`hidden`);
+
+    document.addEventListener(`keydown`, onErrorMessageEscPress);
+    document.addEventListener(`click`, onErrorMessageClick);
+    errorButton.addEventListener(`click`, onErrorButtonClick);
+  };
+
+  const onSuccessMessageEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      hiddenSuccessMessage();
+    }
+  };
+
+  const onSuccessMessageClick = (evt) => {
+    evt.preventDefault();
+    hiddenSuccessMessage();
+  };
+
+  const hiddenSuccessMessage = () => {
+    const success = window.elements.main.querySelector(`.success`);
+    success.classList.add(`hidden`);
+    document.removeEventListener(`click`, onSuccessMessageClick);
+    document.removeEventListener(`keydown`, onSuccessMessageEscPress);
+  };
+
+  const onErrorMessageEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      hiddenErrorMessage();
+    }
+  };
+
+  const onErrorMessageClick = (evt) => {
+    evt.preventDefault();
+    hiddenErrorMessage();
+  };
+
+  const onErrorButtonClick = (evt) => {
+    evt.preventDefault();
+    hiddenErrorMessage();
+  };
+
+  const hiddenErrorMessage = () => {
+    const errorButton = window.elements.main.querySelector(`.error__button`);
+    const error = window.elements.main.querySelector(`.error`);
+    error.classList.add(`hidden`);
+    document.removeEventListener(`click`, onErrorMessageClick);
+    document.removeEventListener(`keydown`, onErrorMessageEscPress);
+    errorButton.removeEventListener(`click`, onErrorButtonClick);
   };
 
   window.util = {
@@ -88,6 +156,9 @@
     FEATURES,
     URL,
     MAX_PIN_COUNT,
-    errorHandler
+    MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
+    errorHandler,
+    showSuccessMessage,
+    showErrorMessage
   };
 })();
