@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const renderMapPin = (object) => {
     let mapPin = window.elements.pinTemplate.cloneNode(true);
@@ -14,26 +14,49 @@
     return mapPin;
   };
 
-  const activateServerDownloads = (arr) => {
-    let newArr = filterArray(arr);
-    let fragment = document.createDocumentFragment();
-    for (let i = 0; i < newArr.length; i++) {
-      fragment.appendChild(renderMapPin(newArr[i]));
-    }
-    window.elements.mapPins.appendChild(fragment);
-    window.card.activateCards(newArr);
-    window.form.enableForm(window.elements.formFieldsets);
-    window.form.enableForm(window.elements.mapFiltersSelects);
+  let array = [];
+
+  let type = `any`;
+
+  const updatePins = () => {
+    let filterArr = filterPinsByType(array);
+    activateServerDownloads(filterArr);
   };
 
-  const filterArray = (arr) => {
+  const filterPinsByType = (arr) => {
     let newArr = [];
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i].hasOwnProperty(`offer`) && newArr.length < 5) {
+      if (arr[i].offer.type === type && newArr.length < window.util.MAX_PIN_COUNT) {
+        newArr.push(arr[i]);
+      } else if (type === `any` && newArr.length < window.util.MAX_PIN_COUNT) {
         newArr.push(arr[i]);
       }
     }
     return newArr;
+  };
+
+  const changePinsOnMap = () => {
+    type = window.elements.housingType.value;
+    window.map.removePins();
+    window.map.removeCards();
+    resetCurrent();
+    updatePins();
+  };
+
+  const successHandler = (data) => {
+    array = window.util.filterArray(data);
+    updatePins();
+  };
+
+  const activateServerDownloads = (arr) => {
+    let fragment = document.createDocumentFragment();
+    for (let i = 0; i < arr.length; i++) {
+      fragment.appendChild(renderMapPin(arr[i]));
+    }
+    window.elements.mapPins.appendChild(fragment);
+    window.card.activateCards(arr);
+    window.form.enableForm(window.elements.formFieldsets);
+    window.form.enableForm(window.elements.mapFiltersSelects);
   };
 
   let currentCard = null;
@@ -115,8 +138,16 @@
     }
   };
 
+  const resetCurrent = () => {
+    currentIndex = 0;
+    currentCard = null;
+  };
+
   window.pin = {
+    resetCurrent,
     activateServerDownloads,
-    showObjectCard
+    showObjectCard,
+    successHandler,
+    changePinsOnMap
   };
 })();

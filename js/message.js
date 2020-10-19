@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const filingErrorBlock = () => {
     const errorWindow = window.elements.errorTemplate.cloneNode(true);

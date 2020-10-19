@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const map = document.querySelector(`.map`);
   const mapPins = map.querySelector(`.map__pins`);
@@ -24,6 +24,7 @@
   const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
   const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
   const main = document.querySelector(`main`);
+  const housingType = mapFilters.querySelector(`#housing-type`);
 
   window.elements = {
     form,
@@ -38,6 +39,7 @@
     map,
     mapPins,
     mapPinMain,
+    mapFilters,
     mapFiltersContainer,
     mapFiltersSelects,
     formFieldsets,
@@ -46,7 +48,8 @@
     formReset,
     successTemplate,
     errorTemplate,
-    main
+    main,
+    housingType
   };
 
 })();

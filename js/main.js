@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
   window.form.disabledForm(window.elements.formFieldsets);
   window.form.disabledForm(window.elements.mapFiltersSelects);
 
@@ -17,6 +17,8 @@
 
   window.elements.formReset.addEventListener(`keydown`, window.form.onFormResetEnterPress);
   window.elements.formReset.addEventListener(`click`, window.form.onFormResetClick);
+
+  window.elements.mapFilters.addEventListener(`change`, window.pin.changePinsOnMap);
 
   window.message.filingErrorBlock();
   window.message.filingSuccessBlock();
