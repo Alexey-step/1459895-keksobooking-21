@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const load = (onSuccess, onError, url) => {
     const xhr = new XMLHttpRequest();

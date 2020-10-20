@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const onMouseDown = (evt) => {
     evt.preventDefault();

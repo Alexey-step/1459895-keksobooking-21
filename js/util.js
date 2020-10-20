@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const MAX_PRICE = 1000000;
   const MAX_ROOM = 100;
@@ -140,6 +140,16 @@
     errorButton.removeEventListener(`click`, onErrorButtonClick);
   };
 
+  const filterArray = (arr) => {
+    let newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].hasOwnProperty(`offer`)) {
+        newArr.push(arr[i]);
+      }
+    }
+    return newArr;
+  };
+
   window.util = {
     MAX_PRICE,
     MAP_SIZES: MapSizes,
@@ -159,6 +169,7 @@
     MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
     errorHandler,
     showSuccessMessage,
-    showErrorMessage
+    showErrorMessage,
+    filterArray
   };
 })();

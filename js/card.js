@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const OfferType = {
     palace: `дворец`,

@@ -1,11 +1,11 @@
 "use strict";
 
-(function () {
+(() => {
 
   const activateMap = () => {
     window.elements.map.classList.remove(`map--faded`);
     window.elements.form.classList.remove(`ad-form--disabled`);
-    window.load(window.pin.activateServerDownloads, window.util.errorHandler, window.util.URL);
+    window.load(window.pin.successHandler, window.util.errorHandler, window.util.URL);
     window.elements.mapPinMain.removeEventListener(`mousedown`, onMouseDownPress);
     window.elements.mapPinMain.removeEventListener(`keydown`, onEnterPress);
   };
@@ -17,6 +17,7 @@
     window.form.disabledForm(window.elements.mapFiltersSelects);
     removePins();
     removeCards();
+    window.pin.resetCurrent();
     returnMainPinStartCoordinates();
     window.elements.mapPinMain.addEventListener(`mousedown`, window.map.onMouseDownPress);
     window.elements.mapPinMain.addEventListener(`keydown`, window.map.onEnterPress);
@@ -57,7 +58,9 @@
     onMouseDownPress,
     onEnterPress,
     activateMap,
-    deactivateMap
+    deactivateMap,
+    removePins,
+    removeCards
   };
 
 })();

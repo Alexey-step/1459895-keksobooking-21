@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(() => {
 
   const chekValidGuestsSelector = (room, guests) => {
     room = +room;
