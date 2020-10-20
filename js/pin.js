@@ -2,6 +2,8 @@
 
 (() => {
 
+  const MAP_FORM_OFFER_TYPE = `any`;
+
   const renderMapPin = (object) => {
     let mapPin = window.elements.pinTemplate.cloneNode(true);
 
@@ -16,7 +18,7 @@
 
   let array = [];
 
-  let type = `any`;
+  let type = MAP_FORM_OFFER_TYPE;
 
   const updatePins = () => {
     let filterArr = filterPinsByType(array);
@@ -25,17 +27,17 @@
 
   const filterPinsByType = (arr) => {
     let newArr = [];
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].offer.type === type && newArr.length < window.util.MAX_PIN_COUNT) {
+    for (let i = 0; i < arr.length && newArr.length < window.util.MAX_PIN_COUNT; i++) {
+      if (arr[i].offer.type === type) {
         newArr.push(arr[i]);
-      } else if (type === `any` && newArr.length < window.util.MAX_PIN_COUNT) {
+      } else if (type === MAP_FORM_OFFER_TYPE) {
         newArr.push(arr[i]);
       }
     }
     return newArr;
   };
 
-  const changePinsOnMap = () => {
+  const mapFormHandler = () => {
     type = window.elements.housingType.value;
     window.map.removePins();
     window.map.removeCards();
@@ -48,12 +50,16 @@
     updatePins();
   };
 
-  const activateServerDownloads = (arr) => {
+  const renderPins = (someArr) => {
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < arr.length; i++) {
-      fragment.appendChild(renderMapPin(arr[i]));
+    for (let i = 0; i < someArr.length; i++) {
+      fragment.appendChild(renderMapPin(someArr[i]));
     }
     window.elements.mapPins.appendChild(fragment);
+  };
+
+  const activateServerDownloads = (arr) => {
+    renderPins(arr);
     window.card.activateCards(arr);
     window.form.enableForm(window.elements.formFieldsets);
     window.form.enableForm(window.elements.mapFiltersSelects);
@@ -148,6 +154,6 @@
     activateServerDownloads,
     showObjectCard,
     successHandler,
-    changePinsOnMap
+    mapFormHandler
   };
 })();

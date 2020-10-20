@@ -18,7 +18,7 @@
   window.elements.formReset.addEventListener(`keydown`, window.form.onFormResetEnterPress);
   window.elements.formReset.addEventListener(`click`, window.form.onFormResetClick);
 
-  window.elements.mapFilters.addEventListener(`change`, window.pin.changePinsOnMap);
+  window.elements.mapFilters.addEventListener(`change`, window.pin.mapFormHandler);
 
   window.message.filingErrorBlock();
   window.message.filingSuccessBlock();
