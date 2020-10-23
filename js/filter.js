@@ -48,7 +48,8 @@
   const filterType = (item) => {
     if (type === MAP_FORM_START_VALUE) {
       return true;
-    } else if (item.offer.type === type) {
+    }
+    if (item.offer.type === type) {
       return true;
     }
     return false;
@@ -73,7 +74,8 @@
   const filterRooms = (item) => {
     if (rooms === MAP_FORM_START_VALUE) {
       return true;
-    } else if (item.offer.rooms === parseInt(rooms, 10)) {
+    }
+    if (item.offer.rooms === parseInt(rooms, 10)) {
       return true;
     }
     return false;
@@ -82,7 +84,8 @@
   const filterGuests = (item) => {
     if (guests === MAP_FORM_START_VALUE) {
       return true;
-    } else if (item.offer.guests === parseInt(guests, 10)) {
+    }
+    if (item.offer.guests === parseInt(guests, 10)) {
       return true;
     }
     return false;
@@ -92,13 +95,13 @@
     if (features.length < 1) {
       return true;
     }
-    let arr = [];
+    let count = 0;
     for (let i = 0; i < features.length; i++) {
       if (item.offer.features.includes(features[i])) {
-        arr.push(features[i]);
-        if (arr.length === features.length) {
-          return true;
-        }
+        count++;
+      }
+      if (count === features.length) {
+        return true;
       }
     }
     return false;

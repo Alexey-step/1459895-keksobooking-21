@@ -1,7 +1,7 @@
 "use strict";
 
 (() => {
-  const DEBOUNCE_INTERVAL = 500; // ms
+  const DEBOUNCE_INTERVAL = 500;
 
   window.debounce = function (cb) {
     let lastTimeout = null;
@@ -11,7 +11,7 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(() => {
-        cb.apply(null, ...rest);
+        cb(...rest);
       }, DEBOUNCE_INTERVAL);
     };
   };
