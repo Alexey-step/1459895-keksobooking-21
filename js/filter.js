@@ -100,9 +100,9 @@
       if (item.offer.features.includes(features[i])) {
         count++;
       }
-      if (count === features.length) {
-        return true;
-      }
+    }
+    if (count === features.length) {
+      return true;
     }
     return false;
   };
