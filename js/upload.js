@@ -1,33 +1,29 @@
 "use strict";
 
-(() => {
-
-  const URL = `https://21.javascript.pages.academy/keksobooking`;
+const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
 
 
-  const upload = (data, onSuccess, onError) => {
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = `json`;
+const upload = (data, onSuccess, onError) => {
+  const xhr = new XMLHttpRequest();
+  xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, () => {
-      switch (xhr.status) {
-        case window.util.CODE.SUCCESS:
-          onSuccess(xhr.response);
-          break;
+  xhr.addEventListener(`load`, () => {
+    switch (xhr.status) {
+      case window.util.CODE.SUCCESS:
+        onSuccess(xhr.response);
+        break;
 
-        default:
-          window.util.showErrorMessage();
-      }
-    });
+      default:
+        window.util.showErrorMessage();
+    }
+  });
 
-    xhr.addEventListener(`error`, () => {
-      onError(`Произошла ошибка соединения`);
-    });
+  xhr.addEventListener(`error`, () => {
+    onError(`Произошла ошибка соединения`);
+  });
 
-    xhr.open(`POST`, URL);
-    xhr.send(data);
-  };
+  xhr.open(`POST`, URL_UPLOAD);
+  xhr.send(data);
+};
 
-  window.upload = upload;
-
-})();
+window.upload = upload;
