@@ -69,6 +69,8 @@ const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
 const MAX_PIN_COUNT = 5;
 
+const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+
 const errorHandler = (errorMessage) => {
   const node = document.createElement(`div`);
   node.style = `z-index: 100; text-align: center; background-color: white; border: 2px solid red; color: red; max-width: 400px; min-height: 130px; display: flex; align-items: center; border-radius: 20px;`;
@@ -171,6 +173,7 @@ window.util = {
   MAX_PIN_COUNT,
   MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
   FilterPrice,
+  FILE_TYPES,
   errorHandler,
   showSuccessMessage,
   showErrorMessage,

@@ -14,8 +14,8 @@ window.elements.mapPinMain.addEventListener(`mousedown`, window.move.onMouseDown
 
 window.elements.form.addEventListener(`submit`, window.form.onFormSubmit);
 
-window.elements.formReset.addEventListener(`keydown`, window.form.onFormResetEnterPress);
-window.elements.formReset.addEventListener(`click`, window.form.onFormResetClick);
+window.elements.formResetButton.addEventListener(`keydown`, window.form.onFormResetEnterPress);
+window.elements.formResetButton.addEventListener(`click`, window.form.onFormResetClick);
 
 window.elements.mapFilters.addEventListener(`change`, window.debounce(window.filter.mapFormHandler));
 

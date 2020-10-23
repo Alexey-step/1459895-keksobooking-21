@@ -53,6 +53,12 @@ const formHandler = (evt) => {
   if (evt.target === window.elements.formTimeOut) {
     return syncTime(window.elements.formTimeOut, window.elements.formTimeIn);
   }
+  if (evt.target === window.elements.fileAvatarChooser) {
+    return window.preview.avatarPreviewHandler();
+  }
+  if (evt.target === window.elements.fileHousingChooser) {
+    return window.preview.housingPreviewHandler();
+  }
   return true;
 };
 
@@ -137,7 +143,21 @@ const onFormResetEnterPress = (evt) => {
 
 const formReset = () => {
   window.elements.form.reset();
+  formHousingPreviewReset();
+  formAvatarPreviewReset();
   window.form.updateAddressValue();
+};
+
+const formHousingPreviewReset = () => {
+  if (window.elements.housingPreview.children.length > 0) {
+    window.elements.housingPreview.innerHTML = ``;
+  }
+};
+
+const formAvatarPreviewReset = () => {
+  if (window.elements.avatarPreview.src !== `img/muffin-grey.svg`) {
+    window.elements.avatarPreview.src = `img/muffin-grey.svg`;
+  }
 };
 
 window.form = {
