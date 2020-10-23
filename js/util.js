@@ -9,6 +9,11 @@
   const MIN_LENGTH_VALUE = 30;
   const MIN_PRICES = [0, 1000, 5000, 10000];
 
+  const FilterPrice = {
+    LOW: 10000,
+    HIGH: 50000
+  };
+
   const Code = {
     SUCCESS: 200,
     CACHED: 302,
@@ -167,6 +172,7 @@
     URL,
     MAX_PIN_COUNT,
     MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
+    FilterPrice,
     errorHandler,
     showSuccessMessage,
     showErrorMessage,

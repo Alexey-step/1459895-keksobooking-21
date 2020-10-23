@@ -2,8 +2,6 @@
 
 (() => {
 
-  const MAP_FORM_OFFER_TYPE = `any`;
-
   const renderMapPin = (object) => {
     let mapPin = window.elements.pinTemplate.cloneNode(true);
 
@@ -14,40 +12,6 @@
 
 
     return mapPin;
-  };
-
-  let array = [];
-
-  let type = MAP_FORM_OFFER_TYPE;
-
-  const updatePins = () => {
-    let filterArr = filterPinsByType(array);
-    activateServerDownloads(filterArr);
-  };
-
-  const filterPinsByType = (arr) => {
-    let newArr = [];
-    for (let i = 0; i < arr.length && newArr.length < window.util.MAX_PIN_COUNT; i++) {
-      if (arr[i].offer.type === type) {
-        newArr.push(arr[i]);
-      } else if (type === MAP_FORM_OFFER_TYPE) {
-        newArr.push(arr[i]);
-      }
-    }
-    return newArr;
-  };
-
-  const mapFormHandler = () => {
-    type = window.elements.housingType.value;
-    window.map.removePins();
-    window.map.removeCards();
-    resetCurrent();
-    updatePins();
-  };
-
-  const successHandler = (data) => {
-    array = window.util.filterArray(data);
-    updatePins();
   };
 
   const renderPins = (someArr) => {
@@ -152,8 +116,6 @@
   window.pin = {
     resetCurrent,
     activateServerDownloads,
-    showObjectCard,
-    successHandler,
-    mapFormHandler
+    showObjectCard
   };
 })();

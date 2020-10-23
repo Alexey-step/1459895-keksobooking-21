@@ -25,6 +25,10 @@
   const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
   const main = document.querySelector(`main`);
   const housingType = mapFilters.querySelector(`#housing-type`);
+  const housingPrice = mapFilters.querySelector(`#housing-price`);
+  const housingRooms = mapFilters.querySelector(`#housing-rooms`);
+  const housingGuests = mapFilters.querySelector(`#housing-guests`);
+  const featuresInputs = mapFilters.querySelectorAll(`input[name="features"]`);
 
   window.elements = {
     form,
@@ -49,7 +53,11 @@
     successTemplate,
     errorTemplate,
     main,
-    housingType
+    housingType,
+    housingPrice,
+    housingRooms,
+    housingGuests,
+    featuresInputs
   };
 
 })();
