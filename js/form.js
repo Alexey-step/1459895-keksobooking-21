@@ -54,10 +54,10 @@ const formHandler = (evt) => {
     return syncTime(window.elements.formTimeOut, window.elements.formTimeIn);
   }
   if (evt.target === window.elements.fileAvatarChooser) {
-    return window.preview.avatarPreviewHandler();
+    return window.preview.previewHandler(window.elements.fileAvatarChooser, window.preview.onLoadAvatarPreview);
   }
   if (evt.target === window.elements.fileHousingChooser) {
-    return window.preview.housingPreviewHandler();
+    return window.preview.previewHandler(window.elements.fileHousingChooser, window.preview.onLoadHousingPreview);
   }
   return true;
 };
@@ -122,8 +122,7 @@ const disabledForm = (element) => {
 const onFormSubmit = (evt) => {
   window.upload(new FormData(window.elements.form), () => {
     window.map.deactivateMap();
-    window.elements.form.reset();
-    window.form.updateAddressValue();
+    formReset();
     window.util.showSuccessMessage();
   }, window.util.errorHandler);
   evt.preventDefault();
@@ -155,8 +154,9 @@ const formHousingPreviewReset = () => {
 };
 
 const formAvatarPreviewReset = () => {
-  if (window.elements.avatarPreview.src !== `img/muffin-grey.svg`) {
-    window.elements.avatarPreview.src = `img/muffin-grey.svg`;
+  const standartAvatar = `img/muffin-grey.svg`;
+  if (!window.elements.avatarPreview.src.endsWith(standartAvatar)) {
+    window.elements.avatarPreview.src = standartAvatar;
   }
 };
 
