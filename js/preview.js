@@ -9,9 +9,7 @@ const previewHandler = (element, successPreview) => {
     const reader = new FileReader();
 
     reader.addEventListener(`load`, () => {
-      if (window.elements.housingPreview.children.length < 1) {
-        successPreview(reader.result);
-      }
+      successPreview(reader.result);
     });
 
     reader.readAsDataURL(file);
@@ -19,7 +17,8 @@ const previewHandler = (element, successPreview) => {
 };
 
 const onLoadHousingPreview = (result) => {
-  if (window.elements.housingPreview.children.length < 1) {
+  if (window.elements.housingPreview.children) {
+    window.elements.housingPreview.innerHTML = ``;
     window.elements.housingPreview.insertAdjacentHTML(`beforeend`, `<img src=${result} width=45 height=40 alt="Фотография жилья" >`);
   }
 };

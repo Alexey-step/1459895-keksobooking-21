@@ -1,5 +1,7 @@
 "use strict";
 
+const STANDART_AVATAR = `img/muffin-grey.svg`;
+
 const chekValidGuestsSelector = (room, guests) => {
   room = +room;
   guests = +guests;
@@ -154,9 +156,8 @@ const formHousingPreviewReset = () => {
 };
 
 const formAvatarPreviewReset = () => {
-  const standartAvatar = `img/muffin-grey.svg`;
-  if (!window.elements.avatarPreview.src.endsWith(standartAvatar)) {
-    window.elements.avatarPreview.src = standartAvatar;
+  if (!window.elements.avatarPreview.src.endsWith(STANDART_AVATAR)) {
+    window.elements.avatarPreview.src = STANDART_AVATAR;
   }
 };
 
