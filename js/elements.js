@@ -3,9 +3,9 @@
 const map = document.querySelector(`.map`);
 const mapPins = map.querySelector(`.map__pins`);
 const mapPinMain = map.querySelector(`.map__pin--main`);
-const mapFiltersContainer = map.querySelector(`.map__filters-container`);
-const mapFilters = mapFiltersContainer.querySelector(`.map__filters`);
-const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
+const mapFilterFormContainer = map.querySelector(`.map__filters-container`);
+const mapFilterForm = mapFilterFormContainer.querySelector(`.map__filters`);
+const mapFilterFormSelects = mapFilterForm.querySelectorAll(`select`);
 const form = document.querySelector(`.ad-form`);
 const formFieldsets = form.querySelectorAll(`fieldset`);
 const roomsNumber = form.querySelector(`#room_number`);
@@ -22,11 +22,11 @@ const formResetButton = form.querySelector(`.ad-form__reset`);
 const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
 const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 const main = document.querySelector(`main`);
-const housingType = mapFilters.querySelector(`#housing-type`);
-const housingPrice = mapFilters.querySelector(`#housing-price`);
-const housingRooms = mapFilters.querySelector(`#housing-rooms`);
-const housingGuests = mapFilters.querySelector(`#housing-guests`);
-const featuresInputs = mapFilters.querySelectorAll(`input[name="features"]`);
+const housingType = mapFilterForm.querySelector(`#housing-type`);
+const housingPrice = mapFilterForm.querySelector(`#housing-price`);
+const housingRooms = mapFilterForm.querySelector(`#housing-rooms`);
+const housingGuests = mapFilterForm.querySelector(`#housing-guests`);
+const featuresInputs = mapFilterForm.querySelectorAll(`input[name="features"]`);
 const fileAvatarChooser = form.querySelector(`.ad-form-header__input`);
 const avatarPreview = form.querySelector(`.ad-form-header__preview img`);
 const fileHousingChooser = form.querySelector(`.ad-form__input`);
@@ -45,9 +45,9 @@ window.elements = {
   map,
   mapPins,
   mapPinMain,
-  mapFilters,
-  mapFiltersContainer,
-  mapFiltersSelects,
+  mapFilterForm,
+  mapFilterFormContainer,
+  mapFilterFormSelects,
   formFieldsets,
   cardTemplate,
   pinTemplate,

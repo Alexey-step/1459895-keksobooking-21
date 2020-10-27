@@ -2,7 +2,6 @@
 
 const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
 
-
 const upload = (data, onSuccess, onError) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
@@ -12,7 +11,6 @@ const upload = (data, onSuccess, onError) => {
       case window.util.CODE.SUCCESS:
         onSuccess(xhr.response);
         break;
-
       default:
         window.util.showErrorMessage();
     }

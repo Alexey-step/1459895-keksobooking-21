@@ -1,6 +1,6 @@
 "use strict";
 
-const renderMapPin = (object) => {
+const renderPin = (object) => {
   let mapPin = window.elements.pinTemplate.cloneNode(true);
 
   mapPin.querySelector(`img`).src = object.author.avatar;
@@ -8,13 +8,12 @@ const renderMapPin = (object) => {
   mapPin.style.left = (object.location.x - (window.util.PIN_SIZES.WIDTH / 2)) + `px`;
   mapPin.style.top = (object.location.y - window.util.PIN_SIZES.HEIGHT) + `px`;
 
-
   return mapPin;
 };
 
 const renderPins = (someArr) => {
   let fragment = document.createDocumentFragment();
-  someArr.forEach((item) => fragment.appendChild(renderMapPin(item)));
+  someArr.forEach((item) => fragment.appendChild(renderPin(item)));
   window.elements.mapPins.appendChild(fragment);
 };
 
@@ -22,7 +21,7 @@ const activateServerDownloads = (arr) => {
   renderPins(arr);
   window.card.activateCards(arr);
   window.form.enableForm(window.elements.formFieldsets);
-  window.form.enableForm(window.elements.mapFiltersSelects);
+  window.form.enableForm(window.elements.mapFilterFormSelects);
 };
 
 let currentCard = null;

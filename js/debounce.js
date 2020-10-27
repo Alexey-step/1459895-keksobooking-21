@@ -2,10 +2,10 @@
 
 const DEBOUNCE_INTERVAL = 500;
 
-window.debounce = function (cb) {
+window.debounce = (cb) => {
   let lastTimeout = null;
 
-  return function (...rest) {
+  return (...rest) => {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }

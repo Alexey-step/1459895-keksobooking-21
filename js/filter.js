@@ -1,17 +1,14 @@
 "use strict";
 
-const MAP_FORM_START_VALUE = `any`;
-
 let array = [];
-
-let type = MAP_FORM_START_VALUE;
-let rooms = MAP_FORM_START_VALUE;
-let guests = MAP_FORM_START_VALUE;
+let type = window.util.MAP_FORM_START_VALUE;
+let rooms = window.util.MAP_FORM_START_VALUE;
+let guests = window.util.MAP_FORM_START_VALUE;
 let features = [];
-let price = MAP_FORM_START_VALUE;
+let price = window.util.MAP_FORM_START_VALUE;
 
-const successHandler = (data) => {
-  array = window.util.filterArray(data);
+const onSuccessLoad = (data) => {
+  array = window.util.filterDataArray(data);
   updatePins();
 };
 
@@ -38,13 +35,12 @@ const filterArray = (arr) => {
     if (result) {
       length++;
     }
-
     return result;
   });
 };
 
 const filterType = (item) => {
-  if (type === MAP_FORM_START_VALUE) {
+  if (type === window.util.MAP_FORM_START_VALUE) {
     return true;
   }
   if (item.offer.type === type) {
@@ -54,7 +50,7 @@ const filterType = (item) => {
 };
 
 const filterPrice = (item) => {
-  if (price === MAP_FORM_START_VALUE) {
+  if (price === window.util.MAP_FORM_START_VALUE) {
     return true;
   }
   if (price === `middle` && item.offer.price >= window.util.FilterPrice.LOW && item.offer.price <= window.util.FilterPrice.HIGH) {
@@ -70,7 +66,7 @@ const filterPrice = (item) => {
 };
 
 const filterRooms = (item) => {
-  if (rooms === MAP_FORM_START_VALUE) {
+  if (rooms === window.util.MAP_FORM_START_VALUE) {
     return true;
   }
   if (item.offer.rooms === parseInt(rooms, 10)) {
@@ -80,7 +76,7 @@ const filterRooms = (item) => {
 };
 
 const filterGuests = (item) => {
-  if (guests === MAP_FORM_START_VALUE) {
+  if (guests === window.util.MAP_FORM_START_VALUE) {
     return true;
   }
   if (item.offer.guests === parseInt(guests, 10)) {
@@ -105,7 +101,7 @@ const filterFeatures = (item) => {
   return false;
 };
 
-const mapFormHandler = () => {
+const onMapFilterFormChange = () => {
   type = window.elements.housingType.value;
   price = window.elements.housingPrice.value;
   rooms = window.elements.housingRooms.value;
@@ -118,6 +114,6 @@ const mapFormHandler = () => {
 };
 
 window.filter = {
-  mapFormHandler,
-  successHandler
+  onMapFilterFormChange,
+  onSuccessLoad
 };
