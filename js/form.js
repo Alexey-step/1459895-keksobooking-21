@@ -1,5 +1,7 @@
 "use strict";
 
+const STANDART_AVATAR = `img/muffin-grey.svg`;
+
 const chekValidGuestsSelector = (room, guests) => {
   room = +room;
   guests = +guests;
@@ -52,6 +54,12 @@ const formHandler = (evt) => {
   }
   if (evt.target === window.elements.formTimeOut) {
     return syncTime(window.elements.formTimeOut, window.elements.formTimeIn);
+  }
+  if (evt.target === window.elements.fileAvatarChooser) {
+    return window.preview.previewHandler(window.elements.fileAvatarChooser, window.preview.onLoadAvatarPreview);
+  }
+  if (evt.target === window.elements.fileHousingChooser) {
+    return window.preview.previewHandler(window.elements.fileHousingChooser, window.preview.onLoadHousingPreview);
   }
   return true;
 };
@@ -116,8 +124,7 @@ const disabledForm = (element) => {
 const onFormSubmit = (evt) => {
   window.upload(new FormData(window.elements.form), () => {
     window.map.deactivateMap();
-    window.elements.form.reset();
-    window.form.updateAddressValue();
+    formReset();
     window.util.showSuccessMessage();
   }, window.util.errorHandler);
   evt.preventDefault();
@@ -137,7 +144,21 @@ const onFormResetEnterPress = (evt) => {
 
 const formReset = () => {
   window.elements.form.reset();
+  formHousingPreviewReset();
+  formAvatarPreviewReset();
   window.form.updateAddressValue();
+};
+
+const formHousingPreviewReset = () => {
+  if (window.elements.housingPreview.children.length > 0) {
+    window.elements.housingPreview.innerHTML = ``;
+  }
+};
+
+const formAvatarPreviewReset = () => {
+  if (!window.elements.avatarPreview.src.endsWith(STANDART_AVATAR)) {
+    window.elements.avatarPreview.src = STANDART_AVATAR;
+  }
 };
 
 window.form = {

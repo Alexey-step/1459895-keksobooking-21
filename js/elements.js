@@ -18,7 +18,7 @@ const formTimeOut = form.querySelector(`#timeout`);
 const addressInput = form.querySelector(`#address`);
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-const formReset = form.querySelector(`.ad-form__reset`);
+const formResetButton = form.querySelector(`.ad-form__reset`);
 const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
 const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 const main = document.querySelector(`main`);
@@ -27,6 +27,10 @@ const housingPrice = mapFilters.querySelector(`#housing-price`);
 const housingRooms = mapFilters.querySelector(`#housing-rooms`);
 const housingGuests = mapFilters.querySelector(`#housing-guests`);
 const featuresInputs = mapFilters.querySelectorAll(`input[name="features"]`);
+const fileAvatarChooser = form.querySelector(`.ad-form-header__input`);
+const avatarPreview = form.querySelector(`.ad-form-header__preview img`);
+const fileHousingChooser = form.querySelector(`.ad-form__input`);
+const housingPreview = form.querySelector(`.ad-form__photo`);
 
 window.elements = {
   form,
@@ -47,7 +51,7 @@ window.elements = {
   formFieldsets,
   cardTemplate,
   pinTemplate,
-  formReset,
+  formResetButton,
   successTemplate,
   errorTemplate,
   main,
@@ -55,5 +59,9 @@ window.elements = {
   housingPrice,
   housingRooms,
   housingGuests,
-  featuresInputs
+  featuresInputs,
+  fileAvatarChooser,
+  avatarPreview,
+  fileHousingChooser,
+  housingPreview
 };

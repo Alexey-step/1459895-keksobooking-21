@@ -12,6 +12,7 @@ module.exports = {
     `./js/card.js`,
     `./js/filter.js`,
     `./js/upload.js`,
+    `./js/preview.js`,
     `./js/form.js`,
     `./js/map.js`,
     `./js/move.js`,
