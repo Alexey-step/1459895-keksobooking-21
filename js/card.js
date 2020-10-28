@@ -85,7 +85,7 @@ const renderCard = (object) => {
 const activateCards = (arr) => {
   let fragment = document.createDocumentFragment();
   arr.forEach((item) => fragment.appendChild(renderCard(item)));
-  window.elements.map.insertBefore(fragment, window.elements.mapFiltersContainer);
+  window.elements.map.insertBefore(fragment, window.elements.mapFilterFormContainer);
   window.pin.showObjectCard();
 };
 

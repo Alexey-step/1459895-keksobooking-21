@@ -1,6 +1,6 @@
 "use strict";
 
-const previewHandler = (element, successPreview) => {
+const loadPreview = (element, onLoad) => {
   const file = element.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -9,26 +9,26 @@ const previewHandler = (element, successPreview) => {
     const reader = new FileReader();
 
     reader.addEventListener(`load`, () => {
-      successPreview(reader.result);
+      onLoad(reader.result);
     });
 
     reader.readAsDataURL(file);
   }
 };
 
-const onLoadHousingPreview = (result) => {
+const onHousingPreviewLoad = (result) => {
   if (window.elements.housingPreview.children) {
     window.elements.housingPreview.innerHTML = ``;
     window.elements.housingPreview.insertAdjacentHTML(`beforeend`, `<img src=${result} width=45 height=40 alt="Фотография жилья" >`);
   }
 };
 
-const onLoadAvatarPreview = (result) => {
+const onAvatarPreviewLoad = (result) => {
   window.elements.avatarPreview.src = result;
 };
 
 window.preview = {
-  onLoadHousingPreview,
-  previewHandler,
-  onLoadAvatarPreview
+  onHousingPreviewLoad,
+  loadPreview,
+  onAvatarPreviewLoad
 };

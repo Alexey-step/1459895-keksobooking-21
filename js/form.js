@@ -1,7 +1,5 @@
 "use strict";
 
-const STANDART_AVATAR = `img/muffin-grey.svg`;
-
 const chekValidGuestsSelector = (room, guests) => {
   room = +room;
   guests = +guests;
@@ -36,7 +34,7 @@ const clearError = () => {
   window.elements.guestsNumber.setCustomValidity(``);
 };
 
-const formHandler = (evt) => {
+const onFormChange = (evt) => {
   if (evt.target === window.elements.roomsNumber || evt.target === window.elements.guestsNumber) {
     const roomNumberVal = window.elements.roomsNumber.value;
     const guestsNumberVal = window.elements.guestsNumber.value;
@@ -56,10 +54,10 @@ const formHandler = (evt) => {
     return syncTime(window.elements.formTimeOut, window.elements.formTimeIn);
   }
   if (evt.target === window.elements.fileAvatarChooser) {
-    return window.preview.previewHandler(window.elements.fileAvatarChooser, window.preview.onLoadAvatarPreview);
+    return window.preview.loadPreview(window.elements.fileAvatarChooser, window.preview.onAvatarPreviewLoad);
   }
   if (evt.target === window.elements.fileHousingChooser) {
-    return window.preview.previewHandler(window.elements.fileHousingChooser, window.preview.onLoadHousingPreview);
+    return window.preview.loadPreview(window.elements.fileHousingChooser, window.preview.onHousingPreviewLoad);
   }
   return true;
 };
@@ -123,19 +121,18 @@ const disabledForm = (element) => {
 
 const onFormSubmit = (evt) => {
   window.upload(new FormData(window.elements.form), () => {
-    window.map.deactivateMap();
     formReset();
     window.util.showSuccessMessage();
-  }, window.util.errorHandler);
+  }, window.util.onErrorLoad);
   evt.preventDefault();
 };
 
-const onFormResetClick = (evt) => {
+const onFormResetButtonClick = (evt) => {
   evt.preventDefault();
   formReset();
 };
 
-const onFormResetEnterPress = (evt) => {
+const onFormResetButtonEnterPress = (evt) => {
   if (evt.key === `Enter`) {
     evt.preventDefault();
     formReset();
@@ -144,6 +141,7 @@ const onFormResetEnterPress = (evt) => {
 
 const formReset = () => {
   window.elements.form.reset();
+  window.map.deactivateMap();
   formHousingPreviewReset();
   formAvatarPreviewReset();
   window.form.updateAddressValue();
@@ -156,18 +154,18 @@ const formHousingPreviewReset = () => {
 };
 
 const formAvatarPreviewReset = () => {
-  if (!window.elements.avatarPreview.src.endsWith(STANDART_AVATAR)) {
-    window.elements.avatarPreview.src = STANDART_AVATAR;
+  if (!window.elements.avatarPreview.src.endsWith(window.util.STANDART_AVATAR)) {
+    window.elements.avatarPreview.src = window.util.STANDART_AVATAR;
   }
 };
 
 window.form = {
   getMainPinCoordinates,
-  formHandler,
+  onFormChange,
   enableForm,
   disabledForm,
   updateAddressValue,
   onFormSubmit,
-  onFormResetClick,
-  onFormResetEnterPress
+  onFormResetButtonClick,
+  onFormResetButtonEnterPress
 };

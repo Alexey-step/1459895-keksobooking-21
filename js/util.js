@@ -6,6 +6,7 @@ const MIN_GUESTS = 0;
 const MAX_LENGTH_VALUE = 100;
 const MIN_LENGTH_VALUE = 30;
 const MIN_PRICES = [0, 1000, 5000, 10000];
+const MAX_PIN_COUNT = 5;
 
 const FilterPrice = {
   LOW: 10000,
@@ -67,11 +68,18 @@ const MainPinStartCoordinates = {
 
 const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
-const MAX_PIN_COUNT = 5;
+const STANDART_AVATAR = `img/muffin-grey.svg`;
 
-const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+const MAP_FORM_START_VALUE = `any`;
 
-const errorHandler = (errorMessage) => {
+const FILE_TYPES = [
+  `gif`,
+  `jpg`,
+  `jpeg`,
+  `png`
+];
+
+const onErrorLoad = (errorMessage) => {
   const node = document.createElement(`div`);
   node.style = `z-index: 100; text-align: center; background-color: white; border: 2px solid red; color: red; max-width: 400px; min-height: 130px; display: flex; align-items: center; border-radius: 20px;`;
   node.style.position = `fixed`;
@@ -145,7 +153,7 @@ const hiddenErrorMessage = () => {
   errorButton.removeEventListener(`click`, onErrorButtonClick);
 };
 
-const filterArray = (arr) => {
+const filterDataArray = (arr) => {
   let newArr = [];
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].hasOwnProperty(`offer`)) {
@@ -173,9 +181,11 @@ window.util = {
   MAX_PIN_COUNT,
   MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
   FilterPrice,
+  STANDART_AVATAR,
+  MAP_FORM_START_VALUE,
   FILE_TYPES,
-  errorHandler,
+  onErrorLoad,
   showSuccessMessage,
   showErrorMessage,
-  filterArray
+  filterDataArray
 };

@@ -3,36 +3,32 @@
 const activateMap = () => {
   window.elements.map.classList.remove(`map--faded`);
   window.elements.form.classList.remove(`ad-form--disabled`);
-  window.load(window.filter.successHandler, window.util.errorHandler, window.util.URL_LOAD);
-  window.elements.mapPinMain.removeEventListener(`mousedown`, onMouseDownPress);
-  window.elements.mapPinMain.removeEventListener(`keydown`, onEnterPress);
+  window.load(window.filter.onSuccessLoad, window.util.onErrorLoad, window.util.URL_LOAD);
+  window.elements.mapPinMain.removeEventListener(`mousedown`, onMapPinMainMouseDownPress);
+  window.elements.mapPinMain.removeEventListener(`keydown`, onMapPinMainEnterPress);
 };
 
 const deactivateMap = () => {
   window.elements.map.classList.add(`map--faded`);
   window.elements.form.classList.add(`ad-form--disabled`);
   window.form.disabledForm(window.elements.formFieldsets);
-  window.form.disabledForm(window.elements.mapFiltersSelects);
+  window.form.disabledForm(window.elements.mapFilterFormSelects);
   removePins();
   removeCards();
   window.pin.resetCurrent();
   returnMainPinStartCoordinates();
-  window.elements.mapPinMain.addEventListener(`mousedown`, window.map.onMouseDownPress);
-  window.elements.mapPinMain.addEventListener(`keydown`, window.map.onEnterPress);
+  window.elements.mapPinMain.addEventListener(`mousedown`, window.map.onMapPinMainMouseDownPress);
+  window.elements.mapPinMain.addEventListener(`keydown`, window.map.onMapPinMainEnterPress);
 };
 
 const removePins = () => {
   const pins = window.elements.map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-  for (let i = 0; i < pins.length; i++) {
-    pins[i].remove();
-  }
+  pins.forEach((pin) => pin.remove());
 };
 
 const removeCards = () => {
-  const mapCard = window.elements.map.querySelectorAll(`.map__card`);
-  for (let i = 0; i < mapCard.length; i++) {
-    mapCard[i].remove();
-  }
+  const mapCards = window.elements.map.querySelectorAll(`.map__card`);
+  mapCards.forEach((card) => card.remove());
 };
 
 const returnMainPinStartCoordinates = () => {
@@ -40,21 +36,21 @@ const returnMainPinStartCoordinates = () => {
   window.elements.mapPinMain.style.top = `${window.util.MAIN_PIN_START_COORDINATES.Y}px`;
 };
 
-const onMouseDownPress = (evt) => {
+const onMapPinMainMouseDownPress = (evt) => {
   if (evt.button === 0) {
     activateMap();
   }
 };
 
-const onEnterPress = (evt) => {
+const onMapPinMainEnterPress = (evt) => {
   if (evt.key === `Enter`) {
     activateMap();
   }
 };
 
 window.map = {
-  onMouseDownPress,
-  onEnterPress,
+  onMapPinMainMouseDownPress,
+  onMapPinMainEnterPress,
   activateMap,
   deactivateMap,
   removePins,
