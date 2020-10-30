@@ -1,14 +1,7 @@
 "use strict";
 
-window.form.disabledForm(window.elements.formFieldsets);
-window.form.disabledForm(window.elements.mapFilterFormSelects);
-
-window.form.updateAddressValue();
-window.elements.addressInput.setAttribute(`readonly`, ``);
+window.map.deactivateMap();
 window.elements.form.addEventListener(`change`, window.form.onFormChange);
-
-window.elements.mapPinMain.addEventListener(`mousedown`, window.map.onMapPinMainMouseDownPress);
-window.elements.mapPinMain.addEventListener(`keydown`, window.map.onMapPinMainEnterPress);
 
 window.elements.mapPinMain.addEventListener(`mousedown`, window.move.onMouseDown);
 
@@ -19,5 +12,5 @@ window.elements.formResetButton.addEventListener(`click`, window.form.onFormRese
 
 window.elements.mapFilterForm.addEventListener(`change`, window.debounce(window.filter.onMapFilterFormChange));
 
-window.message.filingErrorBlock();
-window.message.filingSuccessBlock();
+window.message.createMessage(window.util.MESSAGE_ELEMENT.ERROR_WINDOW);
+window.message.createMessage(window.util.MESSAGE_ELEMENT.SUCCESS_WINDOW);

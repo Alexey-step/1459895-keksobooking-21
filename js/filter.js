@@ -1,6 +1,6 @@
 "use strict";
 
-let array = [];
+let filteredData = [];
 let type = window.util.MAP_FORM_START_VALUE;
 let rooms = window.util.MAP_FORM_START_VALUE;
 let guests = window.util.MAP_FORM_START_VALUE;
@@ -8,19 +8,19 @@ let features = [];
 let price = window.util.MAP_FORM_START_VALUE;
 
 const onSuccessLoad = (data) => {
-  array = window.util.filterDataArray(data);
+  filteredData = window.util.filterDataArray(data);
   updatePins();
 };
 
 const updatePins = () => {
-  let filterArr = filterArray(array);
+  let filterArr = filterArray(filteredData);
   window.pin.activateServerDownloads(filterArr);
 };
 
-const filterArray = (arr) => {
+const filterArray = (items) => {
 
   let length = 0;
-  return arr.filter((pin) => {
+  return items.filter((pin) => {
     if (length === 5) {
       return false;
     }
@@ -107,8 +107,8 @@ const onMapFilterFormChange = () => {
   rooms = window.elements.housingRooms.value;
   guests = window.elements.housingGuests.value;
   features = Array.from(window.elements.featuresInputs).filter((item) => item.checked).map((item) => item.value);
-  window.map.removePins();
-  window.map.removeCards();
+  window.pin.removePins();
+  window.card.removeCards();
   window.pin.resetCurrent();
   updatePins();
 };

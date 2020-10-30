@@ -7,74 +7,90 @@ const OfferType = {
   bungalow: `бунгало`
 };
 
-const createCapacityString = (someObject) => {
-  let guestString = someObject.offer.guests === 1 ? `${someObject.offer.guests} гостя` : `${someObject.offer.guests} гостей`;
-  let roomsString = someObject.offer.rooms === 1 ? `${someObject.offer.rooms} комната для ` : `${someObject.offer.rooms} комнаты для `;
+const createCapacityString = (item) => {
+  let lastRoomNumber = +item.offer.rooms.toString().slice(-1);
+  let lastGuestsNumber = +item.offer.guests.toString().slice(-1);
+  let guestString = ``;
+  let roomsString = ``;
+  if (lastRoomNumber > 4 && lastRoomNumber <= 9 || lastRoomNumber === 0) {
+    roomsString = `${lastRoomNumber} комнат для `;
+  }
+  if (lastRoomNumber >= 2 && lastRoomNumber <= 4) {
+    roomsString = `${lastRoomNumber} комнаты для `;
+  }
+  if (lastRoomNumber === 1) {
+    roomsString = `${lastRoomNumber} комната для `;
+  }
+  if (lastGuestsNumber === 1) {
+    guestString = `${lastGuestsNumber} гостя`;
+  } else {
+    guestString = `${lastGuestsNumber} гостей`;
+  }
   return roomsString + guestString;
 };
 
-const renderCard = (object) => {
+const renderCard = (item) => {
   let card = window.elements.cardTemplate.cloneNode(true);
 
-  if (object.offer.rooms !== 0 && object.offer.guests !== 0) {
-    card.querySelector(`.popup__text--capacity`).textContent = createCapacityString(object);
+  if (item.offer.rooms !== 0 && item.offer.guests !== 0) {
+    card.querySelector(`.popup__text--capacity`).textContent = createCapacityString(item);
   } else {
     card.querySelector(`.popup__text--capacity`).remove();
   }
 
-  card.querySelector(`.popup__title`).textContent = object.offer.title;
+  card.querySelector(`.popup__title`).textContent = item.offer.title;
 
-  if (object.offer.address !== ``) {
-    card.querySelector(`.popup__text--address`).textContent = object.offer.address;
+  if (item.offer.address !== ``) {
+    card.querySelector(`.popup__text--address`).textContent = item.offer.address;
   } else {
     card.querySelector(`.popup__text--address`).remove();
   }
 
-  if (object.offer.price !== ``) {
-    card.querySelector(`.popup__text--price`).textContent = object.offer.price + `₽/ночь`;
+  if (item.offer.price !== undefined) {
+    card.querySelector(`.popup__text--price`).textContent = item.offer.price + `₽/ночь`;
   } else {
     card.querySelector(`.popup__text--price`).remove();
   }
 
-  if (object.offer.type !== ``) {
-    card.querySelector(`.popup__type`).textContent = OfferType[object.offer.type];
+  if (item.offer.type !== ``) {
+    card.querySelector(`.popup__type`).textContent = OfferType[item.offer.type];
   } else {
     card.querySelector(`.popup__type`).remove();
   }
 
-  if (object.offer.checkin !== `` && object.offer.checkout !== ``) {
-    card.querySelector(`.popup__text--time`).textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
+  if (item.offer.checkin !== undefined && item.offer.checkout !== undefined) {
+    card.querySelector(`.popup__text--time`).textContent = `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`;
   } else {
     card.querySelector(`.popup__text--time`).remove();
   }
 
-  if (object.offer.features.length !== 0) {
-    for (let item of window.util.FEATURES) {
-      if (!object.offer.features.includes(item)) {
-        card.querySelector(`.popup__feature--${item}`).remove();
+  if (item.offer.features.length !== 0) {
+    for (let element of window.util.FEATURES) {
+      if (!item.offer.features.includes(element)) {
+        card.querySelector(`.popup__feature--${element}`).remove();
       }
     }
   } else {
     card.querySelector(`.popup__features`).remove();
   }
 
-  if (object.offer.descriptions !== ``) {
-    card.querySelector(`.popup__description`).textContent = object.offer.description;
+  if (item.offer.description !== ``) {
+    card.querySelector(`.popup__description`).textContent = item.offer.description;
   } else {
     card.querySelector(`.popup__description`).remove();
   }
 
-  if (object.offer.photos.length !== 0) {
-    card.querySelector(`.popup__photo`).src = object.offer.photos[0];
+  if (item.offer.photos.length !== 0) {
+    card.querySelector(`.popup__photo`).src = item.offer.photos[0];
     let cardPopupPhotos = card.querySelector(`.popup__photos`);
-    for (let i = 1; i < object.offer.photos.length; i++) {
-      cardPopupPhotos.insertAdjacentHTML(`beforeend`, `<img src=${object.offer.photos[i]} class=popup__photo width=45 height=40 alt="Фотография жилья" >`);
+    for (let i = 1; i < item.offer.photos.length; i++) {
+      cardPopupPhotos.insertAdjacentHTML(`beforeend`, `<img src=${item.offer.photos[i]} class=popup__photo width=45 height=40 alt="Фотография жилья" >`);
     }
   } else {
     card.querySelector(`.popup__photos`).remove();
   }
-  if (object.author.avatar !== ``) {
-    card.querySelector(`.popup__avatar`).src = object.author.avatar;
+  if (item.author.avatar !== ``) {
+    card.querySelector(`.popup__avatar`).src = item.author.avatar;
   } else {
     card.querySelector(`.popup__avatar`).remove();
   }
@@ -82,13 +98,19 @@ const renderCard = (object) => {
   return card;
 };
 
-const activateCards = (arr) => {
+const activateCards = (items) => {
   let fragment = document.createDocumentFragment();
-  arr.forEach((item) => fragment.appendChild(renderCard(item)));
+  items.forEach((item) => fragment.appendChild(renderCard(item)));
   window.elements.map.insertBefore(fragment, window.elements.mapFilterFormContainer);
-  window.pin.showObjectCard();
+  window.pin.initCardPopup();
+};
+
+const removeCards = () => {
+  const mapCards = window.elements.map.querySelectorAll(`.map__card`);
+  mapCards.forEach((card) => card.remove());
 };
 
 window.card = {
-  activateCards
+  activateCards,
+  removeCards
 };

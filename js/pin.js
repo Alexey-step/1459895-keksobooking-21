@@ -1,115 +1,103 @@
 "use strict";
 
-const renderPin = (object) => {
+const renderPin = (item) => {
   let mapPin = window.elements.pinTemplate.cloneNode(true);
 
-  mapPin.querySelector(`img`).src = object.author.avatar;
-  mapPin.querySelector(`img`).alt = object.offer.title;
-  mapPin.style.left = (object.location.x - (window.util.PIN_SIZES.WIDTH / 2)) + `px`;
-  mapPin.style.top = (object.location.y - window.util.PIN_SIZES.HEIGHT) + `px`;
+  mapPin.querySelector(`img`).src = item.author.avatar;
+  mapPin.querySelector(`img`).alt = item.offer.title;
+  mapPin.style.left = (item.location.x - (window.util.PIN_SIZES.WIDTH / 2)) + `px`;
+  mapPin.style.top = (item.location.y - window.util.PIN_SIZES.HEIGHT) + `px`;
 
   return mapPin;
 };
 
-const renderPins = (someArr) => {
+const renderPins = (items) => {
   let fragment = document.createDocumentFragment();
-  someArr.forEach((item) => fragment.appendChild(renderPin(item)));
+  items.forEach((item) => fragment.appendChild(renderPin(item)));
   window.elements.mapPins.appendChild(fragment);
 };
 
-const activateServerDownloads = (arr) => {
-  renderPins(arr);
-  window.card.activateCards(arr);
-  window.form.enableForm(window.elements.formFieldsets);
-  window.form.enableForm(window.elements.mapFilterFormSelects);
+const activateServerDownloads = (items) => {
+  renderPins(items);
+  window.card.activateCards(items);
+  window.form.enableFormElements(window.elements.mapFilterFormSelects);
 };
 
 let currentCard = null;
 
-const hideElements = (items) => {
+const hideCards = (items) => {
   for (let item of items) {
     item.style.display = `none`;
   }
 };
 
-const showElement = (item) => {
+const show = (item, pin) => {
   item.style.display = `block`;
+  pin.classList.add(`map__pin--active`);
+  currentPin = pin;
   currentCard = item;
   document.addEventListener(`keydown`, onEscPress);
 };
 
-const hideElement = (item) => {
-  item.style.display = `none`;
-  currentCard = null;
-  document.removeEventListener(`keydown`, onEscPress);
+const hide = (item, pin) => {
+  if (currentCard) {
+    item.style.display = `none`;
+    pin.classList.remove(`map__pin--active`);
+    currentCard = null;
+    currentPin = 0;
+    document.removeEventListener(`keydown`, onEscPress);
+  }
 };
 
-let currentIndex = 0;
+let currentPin = 0;
 
-const openPopup = (pin, card) => {
+const initPinClick = (pin, card) => {
   for (let i = 0; i < pin.length; i++) {
     pin[i].addEventListener(`click`, () => {
-      if (currentCard) {
-        pin[currentIndex].classList.remove(`map__pin--active`);
-        hideElement(currentCard);
-      }
-      pin[i].classList.add(`map__pin--active`);
-      showElement(card[i]);
-      currentIndex = i;
-    });
-    pin[i].addEventListener(`keydown`, (evt) => {
-      if (evt.key === `Enter`) {
-        if (currentCard) {
-          hideElement(currentCard);
-        }
-        showElement(card[i]);
-      }
+      hide(currentCard, currentPin);
+      show(card[i], pin[i]);
     });
   }
 };
 
-const showObjectCard = () => {
+const initCardPopup = () => {
   const popupsClose = document.querySelectorAll(`.popup__close`);
-  const pins = window.elements.map.querySelectorAll(`.map__pin`);
-  const pinsArray = createArrayOfPins(pins);
+  const pins = window.elements.map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+  const pinsArray = Array.from(pins);
   const mapCards = document.querySelectorAll(`.map__card`);
-  hideElements(mapCards);
-  openPopup(pinsArray, mapCards);
-  closePopup(popupsClose, mapCards);
+  hideCards(mapCards);
+  initPinClick(pinsArray, mapCards);
+  initCardCloseClick(popupsClose);
 };
 
-const closePopup = (closeButtons, cards) => {
+const initCardCloseClick = (closeButtons) => {
   for (let i = 0; i < closeButtons.length; i++) {
     closeButtons[i].addEventListener(`click`, () => {
-      hideElement(cards[i]);
+      hide(currentCard, currentPin);
     });
   }
-};
-
-const createArrayOfPins = (items) => {
-  let arrayOfPins = [];
-  for (let i = 0; i < items.length; i++) {
-    if (!items[i].classList.contains(`map__pin--main`)) {
-      arrayOfPins.push(items[i]);
-    }
-  }
-  return arrayOfPins;
 };
 
 const onEscPress = (evt) => {
   if (evt.key === `Escape`) {
     evt.preventDefault();
-    hideElement(currentCard);
+    hide(currentCard, currentPin);
   }
 };
 
 const resetCurrent = () => {
-  currentIndex = 0;
+  currentPin = 0;
   currentCard = null;
+};
+
+const removePins = () => {
+  const pins = window.elements.map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+  pins.forEach((pin) => pin.remove());
 };
 
 window.pin = {
   resetCurrent,
   activateServerDownloads,
-  showObjectCard
+  initCardPopup,
+  removePins
 };

@@ -1,6 +1,6 @@
 "use strict";
 
-const chekValidGuestsSelector = (room, guests) => {
+const checkValidGuestsSelect = (room, guests) => {
   room = +room;
   guests = +guests;
   if (room === window.util.MAX_ROOM && guests !== window.util.MIN_GUESTS) {
@@ -38,7 +38,7 @@ const onFormChange = (evt) => {
   if (evt.target === window.elements.roomsNumber || evt.target === window.elements.guestsNumber) {
     const roomNumberVal = window.elements.roomsNumber.value;
     const guestsNumberVal = window.elements.guestsNumber.value;
-    const valid = chekValidGuestsSelector(roomNumberVal, guestsNumberVal);
+    const valid = checkValidGuestsSelect(roomNumberVal, guestsNumberVal);
     return !valid ? showError() : clearError();
   }
   if (evt.target === window.elements.formTitleInput) {
@@ -107,15 +107,15 @@ const updateAddressValue = () => {
   window.elements.addressInput.value = window.form.getMainPinCoordinates();
 };
 
-const enableForm = (element) => {
-  for (let item of element) {
-    item.removeAttribute(`disabled`);
+const enableFormElements = (elements) => {
+  for (let element of elements) {
+    element.removeAttribute(`disabled`);
   }
 };
 
-const disabledForm = (element) => {
-  for (let item of element) {
-    item.setAttribute(`disabled`, `disabled`);
+const disabledFormElements = (elements) => {
+  for (let element of elements) {
+    element.setAttribute(`disabled`, `disabled`);
   }
 };
 
@@ -162,8 +162,8 @@ const formAvatarPreviewReset = () => {
 window.form = {
   getMainPinCoordinates,
   onFormChange,
-  enableForm,
-  disabledForm,
+  enableFormElements,
+  disabledFormElements,
   updateAddressValue,
   onFormSubmit,
   onFormResetButtonClick,
