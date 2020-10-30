@@ -107,27 +107,13 @@ const updateAddressValue = () => {
   window.elements.addressInput.value = window.form.getMainPinCoordinates();
 };
 
-const enableFilterFormElements = (elements) => {
+const enableFormElements = (elements) => {
   for (let element of elements) {
     element.removeAttribute(`disabled`);
   }
 };
 
-const enableForm = (elements) => {
-  window.elements.form.classList.remove(`ad-form--disabled`);
-  for (let element of elements) {
-    element.removeAttribute(`disabled`);
-  }
-};
-
-const disabledForm = (elements) => {
-  window.elements.form.classList.add(`ad-form--disabled`);
-  for (let element of elements) {
-    element.setAttribute(`disabled`, `disabled`);
-  }
-};
-
-const disabledFilterFormElements = (elements) => {
+const disabledFormElements = (elements) => {
   for (let element of elements) {
     element.setAttribute(`disabled`, `disabled`);
   }
@@ -176,12 +162,10 @@ const formAvatarPreviewReset = () => {
 window.form = {
   getMainPinCoordinates,
   onFormChange,
-  enableFilterFormElements,
-  disabledFilterFormElements,
+  enableFormElements,
+  disabledFormElements,
   updateAddressValue,
   onFormSubmit,
   onFormResetButtonClick,
-  onFormResetButtonEnterPress,
-  enableForm,
-  disabledForm
+  onFormResetButtonEnterPress
 };

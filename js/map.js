@@ -2,7 +2,8 @@
 
 const activateMap = () => {
   window.elements.map.classList.remove(`map--faded`);
-  window.form.enableForm(window.elements.formFieldsets);
+  window.elements.form.classList.remove(`ad-form--disabled`);
+  window.form.enableFormElements(window.elements.formFieldsets);
   window.load(window.filter.onSuccessLoad, window.util.onErrorLoad, window.util.URL_LOAD);
   window.elements.mapPinMain.removeEventListener(`mousedown`, onMapPinMainMouseDownPress);
   window.elements.mapPinMain.removeEventListener(`keydown`, onMapPinMainEnterPress);
@@ -10,8 +11,9 @@ const activateMap = () => {
 
 const deactivateMap = () => {
   window.elements.map.classList.add(`map--faded`);
-  window.form.disabledForm(window.elements.formFieldsets);
-  window.form.disabledFilterFormElements(window.elements.mapFilterFormSelects);
+  window.elements.form.classList.add(`ad-form--disabled`);
+  window.form.disabledFormElements(window.elements.formFieldsets);
+  window.form.disabledFormElements(window.elements.mapFilterFormSelects);
   window.pin.removePins();
   window.card.removeCards();
   window.pin.resetCurrent();
