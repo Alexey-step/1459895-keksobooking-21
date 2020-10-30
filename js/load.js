@@ -4,7 +4,7 @@ const load = (onSuccess, onError, url) => {
   const xhr = new XMLHttpRequest();
 
   xhr.responseType = `json`;
-  xhr.timeout = 10000;
+  xhr.timeout = window.util.TIMEOUT;
 
   xhr.addEventListener(`load`, () => {
     let error;

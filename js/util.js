@@ -7,6 +7,7 @@ const MAX_LENGTH_VALUE = 100;
 const MIN_LENGTH_VALUE = 30;
 const MIN_PRICES = [0, 1000, 5000, 10000];
 const MAX_PIN_COUNT = 5;
+const TIMEOUT = 10000;
 
 const FilterPrice = {
   LOW: 10000,
@@ -32,6 +33,8 @@ const MapMainPinSize = {
   WIDTH: 65,
   MAX_HEIGHT: 87
 };
+
+const MAIN_PIN_CENTER = MapMainPinSize.WIDTH / 2;
 
 const PinCoords = {
   MIN_Y: MapSizes.MAP_MIN_HEIGTH - MapMainPinSize.MAX_HEIGHT,
@@ -78,6 +81,11 @@ const FILE_TYPES = [
   `jpeg`,
   `png`
 ];
+
+const MessageElement = {
+  ERROR_WINDOW: window.elements.errorTemplate.cloneNode(true),
+  SUCCESS_WINDOW: window.elements.successTemplate.cloneNode(true)
+};
 
 const onErrorLoad = (errorMessage) => {
   const node = document.createElement(`div`);
@@ -153,11 +161,11 @@ const hiddenErrorMessage = () => {
   errorButton.removeEventListener(`click`, onErrorButtonClick);
 };
 
-const filterDataArray = (arr) => {
+const filterDataArray = (items) => {
   let newArr = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].hasOwnProperty(`offer`)) {
-      newArr.push(arr[i]);
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].hasOwnProperty(`offer`)) {
+      newArr.push(items[i]);
     }
   }
   return newArr;
@@ -165,6 +173,7 @@ const filterDataArray = (arr) => {
 
 window.util = {
   MAX_PRICE,
+  TIMEOUT,
   MAP_SIZES: MapSizes,
   PIN_COORDS: PinCoords,
   MAX_ROOM,
@@ -173,6 +182,7 @@ window.util = {
   MAX_LENGTH_VALUE,
   MIN_LENGTH_VALUE,
   MIN_PRICES,
+  MAIN_PIN_CENTER,
   MAP_MAIN_PIN_SIZE: MapMainPinSize,
   PIN_SIZES: PinSizes,
   COORDINATES: Coordinates,
@@ -182,6 +192,7 @@ window.util = {
   MAIN_PIN_START_COORDINATES: MainPinStartCoordinates,
   FilterPrice,
   STANDART_AVATAR,
+  MESSAGE_ELEMENT: MessageElement,
   MAP_FORM_START_VALUE,
   FILE_TYPES,
   onErrorLoad,
