@@ -20,7 +20,7 @@ const renderPins = (items) => {
 const activateServerDownloads = (items) => {
   renderPins(items);
   window.card.activateCards(items);
-  window.form.enableFormElements(window.elements.mapFilterFormSelects);
+  window.form.enableFormElements(window.elements.mapFilterForm);
 };
 
 let currentCard = null;
