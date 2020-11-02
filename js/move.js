@@ -11,10 +11,10 @@ const onMouseDown = (evt) => {
     const limitingPinPositionY = moveEvt.clientY - top - window.util.MAIN_PIN_CENTER;
     const limitingPinPositionX = moveEvt.clientX - left - window.util.MAIN_PIN_CENTER;
 
-    if (limitingPinPositionY > window.util.PIN_COORDS.MIN_Y && limitingPinPositionY < window.util.PIN_COORDS.MAX_Y) {
+    if (limitingPinPositionY >= window.util.PIN_COORDS.MIN_Y && limitingPinPositionY <= window.util.PIN_COORDS.MAX_Y) {
       window.elements.mapPinMain.style.top = `${limitingPinPositionY}px`;
     }
-    if (limitingPinPositionX < window.util.PIN_COORDS.MAX_X && limitingPinPositionX > window.util.PIN_COORDS.MIN_X) {
+    if (limitingPinPositionX <= window.util.PIN_COORDS.MAX_X && limitingPinPositionX >= window.util.PIN_COORDS.MIN_X) {
       window.elements.mapPinMain.style.left = `${limitingPinPositionX}px`;
     }
     window.form.updateAddressValue();

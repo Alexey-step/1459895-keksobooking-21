@@ -29,9 +29,9 @@ const MapSizes = {
 };
 
 const MapMainPinSize = {
-  HEIGHT: 65,
-  WIDTH: 65,
-  MAX_HEIGHT: 87
+  HEIGHT: 62,
+  WIDTH: 62,
+  MAX_HEIGHT: 84
 };
 
 const MAIN_PIN_CENTER = MapMainPinSize.WIDTH / 2;
@@ -46,13 +46,6 @@ const PinCoords = {
 const PinSizes = {
   HEIGHT: 70,
   WIDTH: 50
-};
-
-const Coordinates = {
-  MIN_Y: 130,
-  MAX_Y: 630,
-  MIN_X: 0,
-  MAX_X: 1200
 };
 
 const FEATURES = [
@@ -185,7 +178,6 @@ window.util = {
   MAIN_PIN_CENTER,
   MAP_MAIN_PIN_SIZE: MapMainPinSize,
   PIN_SIZES: PinSizes,
-  COORDINATES: Coordinates,
   FEATURES,
   URL_LOAD,
   MAX_PIN_COUNT,

@@ -21,7 +21,7 @@ const filterArray = (items) => {
 
   let length = 0;
   return items.filter((pin) => {
-    if (length === 5) {
+    if (length === window.util.MAX_PIN_COUNT) {
       return false;
     }
     let result = true;

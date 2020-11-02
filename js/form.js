@@ -17,9 +17,9 @@ const checkValidGuestsSelect = (room, guests) => {
 
 const showError = () => {
   const room = window.elements.roomsNumber.value;
-  if (room === `1`) {
+  if (room === window.util.ROOMS.MIN) {
     window.elements.guestsNumber.setCustomValidity(`Вместительность данного размещения не более ${room} гостя`);
-  } else if (room === `100`) {
+  } else if (room === window.util.ROOMS.MAX) {
     window.elements.guestsNumber.setCustomValidity(`Это размещение не для гостей`);
   } else {
     window.elements.guestsNumber.setCustomValidity(`Вместительность данного размещения не более ${room} гостей`);
@@ -69,6 +69,7 @@ const syncTime = (time1, time2) => {
 const checkValidPrice = (price, type) => {
   let inputPrice = parseInt(window.elements.formPrice.value, 10);
   window.elements.formPrice.placeholder = price[type.selectedIndex];
+  window.elements.formPrice.min = price[type.selectedIndex];
   if (inputPrice < price[type.selectedIndex]) {
     window.elements.formPrice.setCustomValidity(`Минимальная цена для данного размещения ${price[type.selectedIndex]}`);
   } else if (inputPrice > window.util.MAX_PRICE) {
@@ -96,9 +97,9 @@ const getMainPinCoordinates = () => {
   let mapPinMainY = window.elements.mapPinMain.style.top.replace(/[^\d.-]/g, ``);
   let coordinates;
   if (window.elements.map.classList.contains(`map--faded`)) {
-    coordinates = `${Math.floor(+mapPinMainX + window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2)}, ${Math.floor(+mapPinMainY + window.util.MAP_MAIN_PIN_SIZE.HEIGHT / 2)}`;
+    coordinates = `${Math.round(+mapPinMainX + window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2)}, ${Math.round(+mapPinMainY + window.util.MAP_MAIN_PIN_SIZE.HEIGHT / 2)}`;
   } else {
-    coordinates = `${Math.floor(+mapPinMainX + window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2)}, ${Math.floor(+mapPinMainY + window.util.MAP_MAIN_PIN_SIZE.MAX_HEIGHT)}`;
+    coordinates = `${Math.round(+mapPinMainX + window.util.MAP_MAIN_PIN_SIZE.WIDTH / 2)}, ${Math.round(+mapPinMainY + window.util.MAP_MAIN_PIN_SIZE.MAX_HEIGHT)}`;
   }
   return coordinates;
 };
@@ -107,15 +108,15 @@ const updateAddressValue = () => {
   window.elements.addressInput.value = window.form.getMainPinCoordinates();
 };
 
-const enableFormElements = (elements) => {
-  for (let element of elements) {
-    element.removeAttribute(`disabled`);
+const enableFormElements = (element) => {
+  for (let i = 0; i < element.children.length; i++) {
+    element.children[i].removeAttribute(`disabled`);
   }
 };
 
-const disabledFormElements = (elements) => {
-  for (let element of elements) {
-    element.setAttribute(`disabled`, `disabled`);
+const disabledFormElements = (element) => {
+  for (let i = 0; i < element.children.length; i++) {
+    element.children[i].setAttribute(`disabled`, `disabled`);
   }
 };
 
