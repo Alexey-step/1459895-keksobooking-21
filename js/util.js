@@ -9,11 +9,6 @@ const MIN_PRICES = [0, 1000, 5000, 10000];
 const MAX_PIN_COUNT = 5;
 const TIMEOUT = 10000;
 
-const FilterPrice = {
-  LOW: 10000,
-  HIGH: 50000
-};
-
 const Code = {
   SUCCESS: 200,
   CACHED: 302,
@@ -46,6 +41,11 @@ const PinCoords = {
 const PinSizes = {
   HEIGHT: 70,
   WIDTH: 50
+};
+
+const FilterPrice = {
+  LOW: 10000,
+  HIGH: 50000
 };
 
 const FEATURES = [
